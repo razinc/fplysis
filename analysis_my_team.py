@@ -1,13 +1,13 @@
-import aiohttp
-import asyncio
-import fpl_credentials
-import time
-import itertools
-import fpl_custom_functions
-from fpl import FPL
-from prettytable import PrettyTable
-from collections import OrderedDict
-from operator import getitem
+# import aiohttp
+# import asyncio
+# import fpl_credentials
+# import time
+# import itertools
+# import fpl_custom_functions
+# from fpl import FPL
+# from prettytable import PrettyTable
+# from collections import OrderedDict
+# from operator import getitem
 
 start_time = time.time()
 
