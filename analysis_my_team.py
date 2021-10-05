@@ -1,13 +1,3 @@
-# TODO: reduce input for get_player_analysis
-# TODO: reduce input for print_player_table
-# TODO: add log decorator
-# TODO: add time decorator
-# TODO: fix 'Too Many Requests'
-# TODO: check if there are DGW games in the next 5 gameweek & suggest top performing players
-# TODO: run_time
-# TODO: seperate get_my_team_async (error when async def calling another async def)
-# TODO: difference between dir(object) or object.__dict__
-
 import asyncio
 import time
 import fpl_custom_functions
