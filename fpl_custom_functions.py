@@ -92,6 +92,12 @@ def get_player_analysis(element, current_gameweek):
         price_pre_3_gameweeks = price_pre_3_gameweeks[current_gameweek - 1: 3]
     points_previous_three_gameweeks.reverse()
     price_pre_3_gameweeks.reverse()
+    price_pre_3_gameweeks = [i for i in price_pre_3_gameweeks if i > 0]
+    if len(price_pre_3_gameweeks) == 1:
+        price_change = round(price_pre_3_gameweeks[0], 1)
+    else:
+        price_change = round(price_pre_3_gameweeks[-1] - price_pre_3_gameweeks[0], 1)
+
 
     team = asyncio.run(get_team_async(player.team))
     team_nname = team.short_name
@@ -103,7 +109,7 @@ def get_player_analysis(element, current_gameweek):
             "pos": pos,
             "next_3_fxts": next_three_fixtures,
             "price_pre_3_gameweeks": price_pre_3_gameweeks,
-            "price_change": round(price_pre_3_gameweeks[-1] - price_pre_3_gameweeks[0], 1)}
+            "price_change": price_change}
     return player_performance
 
 def print_player_table(players_performance, current_gameweek, previous_three_gameweeks):
