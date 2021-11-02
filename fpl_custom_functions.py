@@ -7,6 +7,7 @@ from fpl import FPL
 from prettytable import PrettyTable
 from collections import OrderedDict
 from operator import getitem
+from tqdm import tqdm
 
 async def get_my_team_async():
     async with aiohttp.ClientSession() as session:
@@ -112,7 +113,7 @@ def get_player_analysis(element, current_gameweek):
             "price_change": price_change}
     return player_performance
 
-def print_player_table(players_performance, current_gameweek, previous_three_gameweeks):
+def get_player_table(players_performance, current_gameweek, previous_three_gameweeks):
     player_table = PrettyTable()
     if "percentage_ownership" in list(players_performance[0].values())[0]:
         header = ["Name", "Pos", "Team", "10k Ownership"]
@@ -142,7 +143,8 @@ def print_player_table(players_performance, current_gameweek, previous_three_gam
             row.append(f"£{price_change}")
             row.extend(v["next_3_fxts"])
             player_table.add_row(row)
-    print(player_table)
+    return player_table.get_string()
+    # print(player_table)
 
 async def get_top_10k(league_id):
     top_10k = []
@@ -150,7 +152,7 @@ async def get_top_10k(league_id):
         fpl = FPL(session)
         await fpl.login(email = fpl_credentials.EMAIL, password = fpl_credentials.PASSWORD)
         overall_league = await fpl.get_classic_league(league_id)
-        for i in range(1, 203, 1):
+        for i in tqdm(range(1, 203, 1), desc = "Parsing top 10k managers      "):
             pg = await overall_league.get_standings(page=i, page_new_entries=1, phase=1)
             for y in pg["results"]:
                 top_10k.append(y["entry"])
@@ -161,3 +163,18 @@ async def get_picks_async(user_id):
         fpl = FPL(session)
         user = await fpl.get_user(user_id)
         return await user.get_picks()
+
+def get_run_time(start_time, end_time):
+    run_time = end_time - start_time
+    if run_time < 60:
+        run_time = round(run_time, 2)
+        run_time = f"{run_time} seconds"
+    elif run_time >= 60 and run_time < 3600:
+        run_time = run_time / 60
+        run_time = round(run_time, 2)
+        run_time = f"{run_time} minutes"
+    elif run_time >= 3600:
+        run_time = run_time / 60 / 60
+        run_time = round(run_time, 2)
+        run_time = f"{run_time} hours"
+    return run_time
