@@ -10,10 +10,7 @@ start_time = time.time()
 current_gameweek = fpl_custom_functions.get_current_gameweek()
 # print(f"Curent GW: {current_gameweek}\n")
 
-# TODO: put in def
-previous_three_gameweeks = [current_gameweek, current_gameweek - 1, current_gameweek - 2]
-previous_three_gameweeks = [gw for gw in previous_three_gameweeks if gw > 0 ]
-previous_three_gameweeks.reverse()
+previous_three_gameweeks = fpl_custom_functions.get_previous_three_gameweeks(current_gameweek)
 
 top_10k = asyncio.run(fpl_custom_functions.get_top_10k(314))
 
@@ -40,7 +37,7 @@ player_table = fpl_custom_functions.get_player_table(players_performance, curren
 #     # print("Performance:")
 #     player_table = fpl_custom_functions.get_player_table(players_performance, current_gameweek, previous_three_gameweeks)
 #     f.write(player_table)
- 
+
 
 with open("output/analysis_top_10k.txt", "w") as f:
     f.write(f"Current GW: {current_gameweek}\n\n")
@@ -52,4 +49,3 @@ end_time = time.time()
 run_time = fpl_custom_functions.get_run_time(start_time, end_time)
 print("\nRun time:")
 print(run_time)
-   

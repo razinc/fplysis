@@ -178,3 +178,9 @@ def get_run_time(start_time, end_time):
         run_time = round(run_time, 2)
         run_time = f"{run_time} hours"
     return run_time
+
+def get_previous_three_gameweeks(current_gameweek):
+    previous_three_gameweeks = [current_gameweek, current_gameweek - 1, current_gameweek - 2]
+    previous_three_gameweeks = [gw for gw in previous_three_gameweeks if gw > 0 ]
+    previous_three_gameweeks.reverse()
+    return previous_three_gameweeks
