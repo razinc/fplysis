@@ -8,7 +8,6 @@ from tqdm import tqdm
 start_time = time.time()
 
 current_gameweek = fpl_custom_functions.get_current_gameweek()
-# print(f"Curent GW: {current_gameweek}\n")
 
 previous_three_gameweeks = fpl_custom_functions.get_previous_three_gameweeks(current_gameweek)
 
@@ -32,12 +31,6 @@ for element, total in tqdm(picks.items(), desc = "Analysing top 50 players      
     player_performance[list(player_performance.keys())[0]]["percentage_ownership"] = f"{percentage_ownership}%"
     players_performance.append(player_performance)
 player_table = fpl_custom_functions.get_player_table(players_performance, current_gameweek, previous_three_gameweeks)
-
-# with open("output/analysis_my_team.txt", "w") as f:
-#     # print("Performance:")
-#     player_table = fpl_custom_functions.get_player_table(players_performance, current_gameweek, previous_three_gameweeks)
-#     f.write(player_table)
-
 
 with open("output/analysis_top_10k.txt", "w") as f:
     f.write(f"Current GW: {current_gameweek}\n\n")

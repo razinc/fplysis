@@ -11,27 +11,22 @@ my_team = my_user["my_team"]
 my_money_remaining = my_user["my_money_remaining"]
 
 current_gameweek = fpl_custom_functions.get_current_gameweek()
-# print(f"Curent GW: {current_gameweek}\n")
 
 previous_three_gameweeks = fpl_custom_functions.get_previous_three_gameweeks(current_gameweek)
 
-# print("Analysing my team.")
 players_performance = []
 for player in tqdm(my_team, desc = "Analysing my team    "):
     player_performance = fpl_custom_functions.get_player_analysis(player["element"], current_gameweek)
     players_performance.append(player_performance)
 players_performance = sorted(players_performance, key = lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"], reverse = True)
 with open("output/analysis_my_team.txt", "w") as f:
-    # print("Performance:")
     f.write(f"Name           : {my_full_name}\n")
     f.write(f"Current GW     : {current_gameweek}\n")
     f.write(f"Money Remaining: £{my_money_remaining}\n\n")
     f.write("Performance:\n")
     player_table = fpl_custom_functions.get_player_table(players_performance, current_gameweek, previous_three_gameweeks)
     f.write(player_table)
-    # fpl_custom_functions.get_player_table(players_performance, current_gameweek, previous_three_gameweeks)
 
-# print("\nAnalysing all players.")
 not_my_team = []
 players = asyncio.run(fpl_custom_functions.get_all_players())
 for player in tqdm(players, desc = "Analysing all players"):

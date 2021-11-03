@@ -152,7 +152,6 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
             row.extend(v["next_3_fxts"])
             player_table.add_row(row)
     return player_table.get_string()
-    # print(player_table)
 
 async def get_top_10k(league_id):
     top_10k = []
