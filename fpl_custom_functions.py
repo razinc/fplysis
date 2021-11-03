@@ -9,12 +9,20 @@ from collections import OrderedDict
 from operator import getitem
 from tqdm import tqdm
 
-async def get_my_team_async():
+async def get_my_user():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
         await fpl.login(email = fpl_credentials.EMAIL, password = fpl_credentials.PASSWORD)
         user = await fpl.get_user()
-        return await user.get_team()
+        full_name = f"{user.player_first_name}, {user.player_last_name}"
+        team =  await user.get_team()
+        money_remaining = await user.get_transfers_status()
+        money_remaining = money_remaining["bank"] / 10
+
+        return {"my_full_name": full_name,
+            "my_team": team,
+            "my_money_remaining": money_remaining
+            }
 
 async def get_all_players():
     async with aiohttp.ClientSession() as session:
