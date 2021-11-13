@@ -83,7 +83,6 @@ with open("output/analysis_league.csv", "w") as f:
     for i in rank:
         team_name = list(i.values())[0]["team_name"]
         gameweek_cumulative_points = list(i.values())[0]["gameweek_cumulative_points"]
-        # print(",".join([str(i) for i in gameweek_cumulative_points]))
         f.write(team_name + "," + ",".join([str(i) for i in gameweek_cumulative_points]) +"\n")
 
     f.write("\nWeekly Top Team:\n")
