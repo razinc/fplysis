@@ -16,6 +16,8 @@ import numpy as np
 
 start_time = time.time()
 
+fpl_custom_functions.create_output_dir()
+
 current_gameweek = fpl_custom_functions.get_current_gameweek()
 
 # TODO: port to fpl_custom_functions.py

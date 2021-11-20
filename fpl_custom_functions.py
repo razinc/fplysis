@@ -8,7 +8,14 @@ from prettytable import PrettyTable
 from collections import OrderedDict
 from operator import getitem
 from tqdm import tqdm
+from os import mkdir
 
+def create_output_dir():
+    try:
+        mkdir("output")
+    except(FileExistsError):
+        pass
+        
 async def get_my_user():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)

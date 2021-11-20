@@ -7,6 +7,8 @@ from tqdm import tqdm
 
 start_time = time.time()
 
+fpl_custom_functions.create_output_dir()
+
 current_gameweek = fpl_custom_functions.get_current_gameweek()
 
 previous_three_gameweeks = fpl_custom_functions.get_previous_three_gameweeks(current_gameweek)

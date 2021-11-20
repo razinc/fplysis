@@ -5,6 +5,8 @@ from tqdm import tqdm
 
 start_time = time.time()
 
+fpl_custom_functions.create_output_dir()
+
 my_user = asyncio.run(fpl_custom_functions.get_my_user())
 my_full_name = my_user["my_full_name"]
 my_team = my_user["my_team"]
