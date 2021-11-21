@@ -7,6 +7,7 @@ Created based on [amosbastian/fpl](https://github.com/amosbastian/fpl) with the 
 3. Analyze your league.
 
 # Installation
+`pip install -r requirements.txt`
 
 # Credentials
 All credentials are stored in `fpl_credentials.py`:
