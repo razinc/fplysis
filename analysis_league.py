@@ -46,7 +46,7 @@ async def get_gameweek_cumulative_points(id):
     gameweek_cumulative_points = [i["total_points"] for i in history]
     return gameweek_cumulative_points
 
-classic_league = asyncio.run(get_classic_league_async(671931))
+classic_league = asyncio.run(get_classic_league_async(fpl_credentials.LEAGUE_ID))
 league_name = classic_league["league"]["name"]
 results = classic_league["standings"]["results"]
 team_names = [i["entry_name"] for i in results]
