@@ -11,8 +11,6 @@ import fpl_credentials
 import aiohttp
 from fpl import FPL
 import json
-import matplotlib.pyplot as plt
-import numpy as np
 
 start_time = time.time()
 
