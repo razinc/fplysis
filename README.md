@@ -3,9 +3,15 @@ Created based on [amosbastian/fpl](https://github.com/amosbastian/fpl) with the 
 
 # Feature
 1. Analyze team and sort by points.
-2. Analyze top 10k teamsn.
+2. Analyze top 10k teams.
+3. Analyze your league.
 
 # Installation
+
+# Credentials
+All credentials are stored in `fpl_credentials.py`:
+1. Username & password
+2. League ID
 
 # Sample Output
 
