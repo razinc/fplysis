@@ -15,7 +15,6 @@ All credentials are stored in `fpl_credentials.py`:
 2. League ID
 
 # Sample Output
-
 * `analysis_my_team.py`
 
 <p align="center">
@@ -28,6 +27,6 @@ All credentials are stored in `fpl_credentials.py`:
   <img src="image/analysis_top_10k_sample.png " width="1000">
 </p>
 
-Upcoming features:
-1. Discord bots.
-2. DGWs suggestions.
+# Upcoming features:
+- [ ] Discord bots
+- [ ] DGWs suggestions
