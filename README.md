@@ -16,17 +16,15 @@ All credentials are stored in `fpl_credentials.py`:
 
 # Sample Output
 * `analysis_my_team.py`
-
 <p align="center">
   <img src="image/analysis_my_team_sample.png" width="1000">
 </p>
 
 * `analysis_top_10k.py`
-
 <p align="center">
   <img src="image/analysis_top_10k_sample.png " width="1000">
 </p>
 
-# Upcoming features:
+# Upcoming features
 - [ ] Discord bots
 - [ ] DGWs suggestions
