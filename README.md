@@ -7,6 +7,7 @@ Created based on [amosbastian/fpl](https://github.com/amosbastian/fpl) with the 
 3. Analyze your league.
 
 # Installation
+`pip install -r requirements.txt`
 
 # Credentials
 All credentials are stored in `fpl_credentials.py`:
@@ -14,19 +15,16 @@ All credentials are stored in `fpl_credentials.py`:
 2. League ID
 
 # Sample Output
-
 * `analysis_my_team.py`
-
 <p align="center">
   <img src="image/analysis_my_team_sample.png" width="1000">
 </p>
 
 * `analysis_top_10k.py`
-
 <p align="center">
   <img src="image/analysis_top_10k_sample.png " width="1000">
 </p>
 
-Upcoming features:
-1. Discord bots.
-2. DGWs suggestions.
+# Upcoming features
+- [ ] Discord bots
+- [ ] DGWs suggestions
