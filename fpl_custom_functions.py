@@ -15,7 +15,7 @@ def create_output_dir():
         mkdir("output")
     except(FileExistsError):
         pass
-        
+
 async def get_my_user():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
@@ -34,7 +34,9 @@ async def get_my_user():
 async def get_all_players():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
-        return await fpl.get_players(include_summary = True)
+        # TOFIX: "Too Many Requests" 
+        players = await fpl.get_players(include_summary = True)
+    return players
 
 async def get_gameweeks_async():
     async with aiohttp.ClientSession() as session:
