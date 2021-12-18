@@ -43,7 +43,7 @@ for player in tqdm(players, desc = "Analysing all players"):
         player_performance = fpl_custom_functions.get_player_analysis(player_element, current_gameweek)
         not_my_team.append(player_performance)
 not_my_team = sorted(not_my_team, key = lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"], reverse = True)
-not_my_team = not_my_team[0: 10]
+not_my_team = not_my_team[0: 20]
 with open("output/analysis_my_team.txt", "a") as f:
     f.write("\n\nWatchlist:\n")
     player_table = fpl_custom_functions.get_player_table(not_my_team, current_gameweek, previous_three_gameweeks)
