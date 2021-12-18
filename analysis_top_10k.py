@@ -28,7 +28,7 @@ picks = dict(islice(picks.items(), 50))
 players_performance = []
 for element, total in tqdm(picks.items(), desc = "Analysing top 50 players      "):
     pick = asyncio.run(fpl_custom_functions.get_picks_async(user_id))
-    player_performance = fpl_custom_functions.get_player_analysis(element, current_gameweek)
+    player_performance = fpl_custom_functions.get_player_analysis(element, current_gameweek, previous_three_gameweeks)
     percentage_ownership = round(total/10000*100, 2)
     player_performance[list(player_performance.keys())[0]]["percentage_ownership"] = f"{percentage_ownership}%"
     players_performance.append(player_performance)

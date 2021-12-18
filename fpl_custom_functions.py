@@ -34,7 +34,7 @@ async def get_my_user():
 async def get_all_players():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
-        # TOFIX: "Too Many Requests" 
+        # TOFIX: "Too Many Requests"
         players = await fpl.get_players(include_summary = True)
     return players
 
@@ -60,19 +60,26 @@ async def get_team_async(team_id):
             fpl = FPL(session)
             return await fpl.get_team(team_id)
 
-def get_next_three_fixtures(player):
+def get_next_three_fixtures(player, current_gameweek):
+    next_three_gameweeks = [current_gameweek+1, current_gameweek+2, current_gameweek+3]
     next_three_fixtures = []
-    for i in range(3):
-        if player.fixtures[i]["is_home"] == True:
-            team_code = player.fixtures[i]["team_a"]
-            where = "H"
+    gameweeks = [i.get("event_name") for i in player.fixtures]
+    for gw in next_three_gameweeks:
+        if f"Gameweek {gw}" in gameweeks:
+            i = gameweeks.index(f"Gameweek {gw}")
+
+            if player.fixtures[i]["is_home"] == True:
+                team_code = player.fixtures[i]["team_a"]
+                where = "H"
+            else:
+                team_code = player.fixtures[i]["team_h"]
+                where = "A"
+            difficulty = player.fixtures[i]["difficulty"]
+            team = asyncio.run(get_team_async(team_code))
+            team_nname = team.short_name
+            next_three_fixtures.append(f"{team_nname} ({where}) ({difficulty})")
         else:
-            team_code = player.fixtures[i]["team_h"]
-            where = "A"
-        difficulty = player.fixtures[i]["difficulty"]
-        team = asyncio.run(get_team_async(team_code))
-        team_nname = team.short_name
-        next_three_fixtures.append(f"{team_nname} ({where}) ({difficulty})")
+            next_three_fixtures.append("Blank GW")
     return next_three_fixtures
 
 def get_player_pos(player):
@@ -86,43 +93,36 @@ def get_player_pos(player):
     elif element_type == 4:
         return "FOR"
 
-def get_player_analysis(element, current_gameweek):
+def get_player_analysis(element, current_gameweek, previous_three_gameweeks):
     player_performance = {}
 
     player = asyncio.run(get_player_async(element))
     web_name = player.web_name
 
-    next_three_fixtures = get_next_three_fixtures(player)
+    next_three_fixtures = get_next_three_fixtures(player, current_gameweek)
 
     pos = get_player_pos(player)
 
     points_previous_three_gameweeks = []
     price_pre_3_gameweeks = []
-    for i in [-1, -2, -3]:
-        try:
+    
+    rounds = [i["round"] for i in player.history]
+    for gw in previous_three_gameweeks:
+        if gw in rounds:
+            i = rounds.index(gw)
             points_previous_three_gameweeks.append(player.history[i]["total_points"])
             price_pre_3_gameweeks.append(player.history[i]["value"] / 10)
-        except(IndexError):
-            points_previous_three_gameweeks.append(0)
+        else:
+            points_previous_three_gameweeks.append("Blank GW")
             price_pre_3_gameweeks.append(0)
-    if current_gameweek <= 2:
-        points_previous_three_gameweeks = points_previous_three_gameweeks[current_gameweek - 1: 3]
-        price_pre_3_gameweeks = price_pre_3_gameweeks[current_gameweek - 1: 3]
-    points_previous_three_gameweeks.reverse()
-    price_pre_3_gameweeks.reverse()
-    price_pre_3_gameweeks = [i for i in price_pre_3_gameweeks if i > 0]
-    if len(price_pre_3_gameweeks) == 1:
-        price_change = round(price_pre_3_gameweeks[0], 1)
-    else:
-        price_change = round(price_pre_3_gameweeks[-1] - price_pre_3_gameweeks[0], 1)
-
+    price_change = round(price_pre_3_gameweeks[-1] - price_pre_3_gameweeks[0], 1)
 
     team = asyncio.run(get_team_async(player.team))
     team_nname = team.short_name
 
     player_performance[f"{web_name}"] = {
             "points_previous_three_gameweeks": points_previous_three_gameweeks,
-            "total_points_previous_three_gameweeks": sum(points_previous_three_gameweeks),
+            "total_points_previous_three_gameweeks": sum([0 if i == "Blank GW" else i for i in points_previous_three_gameweeks]),
             "team": team_nname,
             "pos": pos,
             "next_3_fxts": next_three_fixtures,

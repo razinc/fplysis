@@ -18,7 +18,7 @@ previous_three_gameweeks = fpl_custom_functions.get_previous_three_gameweeks(cur
 
 players_performance = []
 for player in tqdm(my_team, desc = "Analysing my team    "):
-    player_performance = fpl_custom_functions.get_player_analysis(player["element"], current_gameweek)
+    player_performance = fpl_custom_functions.get_player_analysis(player["element"], current_gameweek, previous_three_gameweeks)
     players_performance.append(player_performance)
 players_performance = sorted(players_performance, key = lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"], reverse = True)
 with open("output/analysis_my_team.txt", "w") as f:
@@ -40,10 +40,10 @@ for player in tqdm(players, desc = "Analysing all players"):
     if player_element in [i["element"] for i in my_team]:
        pass
     else:
-        player_performance = fpl_custom_functions.get_player_analysis(player_element, current_gameweek)
+        player_performance = fpl_custom_functions.get_player_analysis(player_element, current_gameweek, previous_three_gameweeks)
         not_my_team.append(player_performance)
 not_my_team = sorted(not_my_team, key = lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"], reverse = True)
-not_my_team = not_my_team[0: 20]
+not_my_team = not_my_team[0: 30]
 with open("output/analysis_my_team.txt", "a") as f:
     f.write("\n\nWatchlist:\n")
     player_table = fpl_custom_functions.get_player_table(not_my_team, current_gameweek, previous_three_gameweeks)
