@@ -104,19 +104,18 @@ def get_player_analysis(element, current_gameweek, previous_three_gameweeks):
     pos = get_player_pos(player)
 
     points_previous_three_gameweeks = []
-    price_pre_3_gameweeks = []
     
     rounds = [i["round"] for i in player.history]
     for gw in previous_three_gameweeks:
         if gw in rounds:
             i = rounds.index(gw)
             points_previous_three_gameweeks.append(player.history[i]["total_points"])
-            price_pre_3_gameweeks.append(player.history[i]["value"] / 10)
         else:
             points_previous_three_gameweeks.append("Blank GW")
-            price_pre_3_gameweeks.append(0)
-    price_change = round(price_pre_3_gameweeks[-1] - price_pre_3_gameweeks[0], 1)
-
+    
+    latest_price = player.now_cost / 10
+    price_change = round(latest_price - player.history[-1]["value"] / 10, 1)
+    
     team = asyncio.run(get_team_async(player.team))
     team_nname = team.short_name
 
@@ -126,7 +125,7 @@ def get_player_analysis(element, current_gameweek, previous_three_gameweeks):
             "team": team_nname,
             "pos": pos,
             "next_3_fxts": next_three_fixtures,
-            "price_pre_3_gameweeks": price_pre_3_gameweeks,
+            "latest_price": latest_price,
             "price_change": price_change}
     return player_performance
 
@@ -139,8 +138,7 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
     for gw in previous_three_gameweeks:
         header.append(f"GW {gw} Pts")
     header.append("Total Pts")
-    for gw in previous_three_gameweeks:
-        header.append(f"GW {gw} Price")
+    header.append(f"Latest Price")
     header.append("Price Change")
     header.extend([f"GW {current_gameweek + 1} Fxt",
         f"GW {current_gameweek + 2} Fxt",
@@ -155,7 +153,7 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
                 row.append(v["percentage_ownership"])
             row.extend(v["points_previous_three_gameweeks"])
             row.append(v["total_points_previous_three_gameweeks"])
-            row.extend([f"£{x}" for x in v["price_pre_3_gameweeks"]])
+            row.append("£" + str(v["latest_price"]))
             price_change = v["price_change"]
             row.append(f"£{price_change}")
             row.extend(v["next_3_fxts"])
