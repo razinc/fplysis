@@ -42,13 +42,23 @@ for player in tqdm(players, desc = "Analysing all players"):
     else:
         player_performance = fpl_custom_functions.get_player_analysis(player_element, current_gameweek, previous_three_gameweeks)
         not_my_team.append(player_performance)
-not_my_team = sorted(not_my_team, key = lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"], reverse = True)
-not_my_team = not_my_team[0: 30]
 with open("output/analysis_my_team.txt", "a") as f:
-    f.write("\n\nWatchlist:\n")
-    player_table = fpl_custom_functions.get_player_table(not_my_team, current_gameweek, previous_three_gameweeks)
+    # sort based on total points
+    f.write("\n\nWatchlist (Total Pts):\n")
+    not_my_team_tp = sorted(not_my_team, key = lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"], reverse = True)
+    not_my_team_tp = not_my_team_tp[0: 10]
+    player_table = fpl_custom_functions.get_player_table(not_my_team_tp, current_gameweek, previous_three_gameweeks)
     f.write(player_table)
+
+    # sort based on expected points
+    f.write("\n\nWatchlist (Expected Pts):\n")
+    not_my_team_ep = sorted(not_my_team, key = lambda x: list(x.values())[0]["expected_points"], reverse = True)
+    not_my_team_ep = not_my_team_ep[0: 10]
+    player_table = fpl_custom_functions.get_player_table(not_my_team_ep, current_gameweek, previous_three_gameweeks)
+    f.write(player_table)
+
     f.write("\n")
+
 
 end_time = time.time()
 run_time = fpl_custom_functions.get_run_time(start_time, end_time)
