@@ -105,6 +105,8 @@ def get_player_analysis(element, current_gameweek, previous_three_gameweeks):
 
     points_previous_three_gameweeks = []
     
+    expected_points = player.ep_this
+
     rounds = [i["round"] for i in player.history]
     for gw in previous_three_gameweeks:
         if gw in rounds:
@@ -122,6 +124,7 @@ def get_player_analysis(element, current_gameweek, previous_three_gameweeks):
     player_performance[f"{web_name}"] = {
             "points_previous_three_gameweeks": points_previous_three_gameweeks,
             "total_points_previous_three_gameweeks": sum([0 if i == "Blank GW" else i for i in points_previous_three_gameweeks]),
+            "expected_points": expected_points,
             "team": team_nname,
             "pos": pos,
             "next_3_fxts": next_three_fixtures,
@@ -138,6 +141,7 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
     for gw in previous_three_gameweeks:
         header.append(f"GW {gw} Pts")
     header.append("Total Pts")
+    header.append("Expected Pts")
     header.append(f"Latest Price")
     header.append("Price Change")
     header.extend([f"GW {current_gameweek + 1} Fxt",
@@ -153,6 +157,7 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
                 row.append(v["percentage_ownership"])
             row.extend(v["points_previous_three_gameweeks"])
             row.append(v["total_points_previous_three_gameweeks"])
+            row.append(v["expected_points"])
             row.append("£" + str(v["latest_price"]))
             price_change = v["price_change"]
             row.append(f"£{price_change}")
