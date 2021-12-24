@@ -52,7 +52,7 @@ with open("output/analysis_my_team.txt", "a") as f:
 
     # sort based on expected points
     f.write("\n\nWatchlist (Expected Pts):\n")
-    not_my_team_ep = sorted(not_my_team, key = lambda x: list(x.values())[0]["expected_points"], reverse = True)
+    not_my_team_ep = sorted(not_my_team, key = lambda x: list(x.values())[0]["expected_points_next"], reverse = True)
     not_my_team_ep = not_my_team_ep[0: 10]
     player_table = fpl_custom_functions.get_player_table(not_my_team_ep, current_gameweek, previous_three_gameweeks)
     f.write(player_table)
