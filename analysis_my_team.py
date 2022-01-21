@@ -20,6 +20,7 @@ players_performance = []
 for player in tqdm(my_team, desc = "Analysing my team    "):
     player_performance = fpl_custom_functions.get_player_analysis(player["element"], current_gameweek, previous_three_gameweeks)
     players_performance.append(player_performance)
+    
 players_performance = sorted(players_performance, key = lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"], reverse = True)
 with open("output/analysis_my_team.txt", "w") as f:
     f.write(f"Name           : {my_full_name}\n")
@@ -58,7 +59,6 @@ with open("output/analysis_my_team.txt", "a") as f:
     f.write(player_table)
 
     f.write("\n")
-
 
 end_time = time.time()
 run_time = fpl_custom_functions.get_run_time(start_time, end_time)

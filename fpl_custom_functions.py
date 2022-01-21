@@ -61,25 +61,29 @@ async def get_team_async(team_id):
             return await fpl.get_team(team_id)
 
 def get_next_three_fixtures(player, current_gameweek):
-    next_three_gameweeks = [current_gameweek+1, current_gameweek+2, current_gameweek+3]
-    next_three_fixtures = []
+    next_three_gameweeks = [current_gameweek + 1, current_gameweek + 2, current_gameweek + 3]
+    next_three_fixtures = {}
     gameweeks = [i.get("event_name") for i in player.fixtures]
-    for gw in next_three_gameweeks:
-        if f"Gameweek {gw}" in gameweeks:
-            i = gameweeks.index(f"Gameweek {gw}")
 
-            if player.fixtures[i]["is_home"] == True:
-                team_code = player.fixtures[i]["team_a"]
-                where = "H"
-            else:
-                team_code = player.fixtures[i]["team_h"]
-                where = "A"
-            difficulty = player.fixtures[i]["difficulty"]
-            team = asyncio.run(get_team_async(team_code))
-            team_nname = team.short_name
-            next_three_fixtures.append(f"{team_nname} ({where}) ({difficulty})")
+    for gw in next_three_gameweeks:
+        next_three_fixtures[gw] = []
+        if f"Gameweek {gw}" in gameweeks:
+            indices = [i for i, x in enumerate(gameweeks) if x == f"Gameweek {gw}"]
+            for i in indices:
+                if player.fixtures[i]["is_home"] == True:
+                    team_code = player.fixtures[i]["team_a"]
+                    where = "H"
+                else:
+                    team_code = player.fixtures[i]["team_h"]
+                    where = "A"
+                difficulty = player.fixtures[i]["difficulty"]
+                team = asyncio.run(get_team_async(team_code))
+                team_nname = team.short_name
+                # next_three_fixtures.append(f"{team_nname} ({where}) ({difficulty})")
+                next_three_fixtures[gw].append(f"{team_nname} ({where}) ({difficulty})") 
         else:
-            next_three_fixtures.append("Blank GW")
+            next_three_fixtures[gw] = ["Blank GW"] 
+
     return next_three_fixtures
 
 def get_player_pos(player):
@@ -165,7 +169,9 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
             row.append("£" + str(v["latest_price"]))
             price_change = v["price_change"]
             row.append(f"£{price_change}")
-            row.extend(v["next_3_fxts"])
+            row.append("\n".join(v["next_3_fxts"][current_gameweek + 1]))
+            row.append("\n".join(v["next_3_fxts"][current_gameweek + 2]))
+            row.append("\n".join(v["next_3_fxts"][current_gameweek + 3]))
             player_table.add_row(row)
     return player_table.get_string()
 
