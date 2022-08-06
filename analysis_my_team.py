@@ -7,14 +7,17 @@ import argparse
 start_time = time.time()
 
 parser = argparse.ArgumentParser(description = "Analyse FPL team")
-parser.add_argument("-id", "--user_id", type = int, help = "User ID. Can be obtained in FPL Points's URL")
-parser.add_argument("-l", "--log_in", type = bool, help = "Enable login. Email & Password must be set in fpl_credentials.py")
+required_args = parser.add_argument_group('at least one of these arguments are required')
+required_args.add_argument("-id", "--user_id", type = int, help = "User ID. Can be obtained in FPL Points's URL.")
+required_args.add_argument("-l", "--log_in", type = bool, help = "Enable login. Email & Password must be set in fpl_credentials.py.")
 args = parser.parse_args()
+if not any(vars(args).values()):
+    parser.error("No arguments provided.")
 
 fpl_custom_functions.create_output_dir()
 
 if args.log_in == True:
-    print("There is an issue with login feature. Please use --team_id instead. For more information: https://github.com/amosbastian/fpl/issues/120")
+    print("There is an issue with login feature. Please use --user_id instead. For more information: https://github.com/amosbastian/fpl/issues/120")
     exit()
     my_user = asyncio.run(fpl_custom_functions.get_my_user())
     my_full_name = my_user["my_full_name"]
