@@ -25,6 +25,6 @@ All credentials are stored in `fpl_credentials.py`:
   <img src="image/analysis_top_10k_sample.png " width="1000">
 </p>
 
-# Upcoming features
+# Upcoming Features
 - [ ] Discord bots
 - [ ] DGWs suggestions
