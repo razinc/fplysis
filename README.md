@@ -15,7 +15,7 @@ All credentials are stored in `fpl_credentials.py`:
 2. League ID
 
 # Usage
-Each of available scripts has simple cheatsheet by adding `-h` switch.
+Each of available scripts has a simple cheatsheet by adding `-h` switch.
 * `analysis_my_team.py`
 ```
 > python analysis_my_team.py -h
