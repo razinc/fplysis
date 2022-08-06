@@ -15,7 +15,7 @@ All credentials are stored in `fpl_credentials.py`:
 2. League ID
 
 # Usage
-Each of available scripts has simple cheatsheet by adding `-h` switch.
+Each of available scripts has a simple cheatsheet by adding `-h` switch.
 * `analysis_my_team.py`
 ```
 > python analysis_my_team.py -h
@@ -34,9 +34,9 @@ at least one of these arguments are required:
 ```
 
 * `analysis_top_10k.py`
-```
-WIP
-```
+
+
+This script is currently can't be used because there is a problem in `login` function. This function is required to grab data from league.
 
 # Sample Output
 * `analysis_my_team.py`
