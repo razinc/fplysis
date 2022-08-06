@@ -156,15 +156,15 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
     else:
         header = ["Name", "Pos", "Team"]
     for gw in previous_three_gameweeks:
-        header.append(f"GW {gw} Pts")
+        header.append(f"GW{gw} Pts")
     header.append("Total Pts")
-    header.append(f"GW {current_gameweek} Expected Pts")
-    header.append(f"GW {current_gameweek + 1} Expected Pts")
+    header.append(f"GW{current_gameweek} xP")
+    header.append(f"GW{current_gameweek + 1} xP")
     header.append(f"Latest Price")
     header.append("Price Change")
-    header.extend([f"GW {current_gameweek + 1} Fxt",
-        f"GW {current_gameweek + 2} Fxt",
-        f"GW {current_gameweek + 3} Fxt"])
+    header.extend([f"GW{current_gameweek + 1} Fxt",
+        f"GW{current_gameweek + 2} Fxt",
+        f"GW{current_gameweek + 3} Fxt"])
     player_table.field_names = header
     for i in players_performance:
         for k, v in i.items():
