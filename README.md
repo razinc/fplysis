@@ -1,5 +1,9 @@
 # Introduction
-Created based on [amosbastian/fpl](https://github.com/amosbastian/fpl) with the intention to make better call in [Fantasy Premier League](https://fantasy.premierleague.com/).
+<p align="center">
+  <img src="image/banner.png" width="500">
+</p>
+
+Created based on [amosbastian/fpl](https://github.com/amosbastian/fpl) with the intention to make better call in [Fantasy Premier League](https://fantasy.premierleague.com/). 
 
 # Feature
 1. Analyze team and sort by points.
