@@ -36,7 +36,12 @@ at least one of these arguments are required:
 * `analysis_top_10k.py`
 
 
-This script is currently can't be used because there is a problem in `login` function. This function is required to grab data from league.
+This script is currently can't be used because there is a problem in `fpl.login` function. This function is required to grab data from league.
+
+* `analysis_league.py`
+
+
+This script is currently can't be used because there is a problem in `fpl.login` function. This function is required to grab data from league.
 
 # Sample Output
 * `analysis_my_team.py`
