@@ -7,7 +7,7 @@ import argparse
 start_time = time.time()
 
 parser = argparse.ArgumentParser(description = "Analyse FPL team")
-parser.add_argument("-id", "--team_id", type = int, help = "Team ID. Can be obtained in FPL Points's URL")
+parser.add_argument("-id", "--user_id", type = int, help = "User ID. Can be obtained in FPL Points's URL")
 parser.add_argument("-l", "--log_in", type = bool, help = "Enable login. Email & Password must be set in fpl_credentials.py")
 args = parser.parse_args()
 
@@ -21,7 +21,7 @@ if args.log_in == True:
     my_team = my_user["my_team"]
     my_money_remaining = my_user["my_money_remaining"]
 else:
-    pick = asyncio.run(fpl_custom_functions.get_picks_async(args.team_id))
+    pick = asyncio.run(fpl_custom_functions.get_picks_async(args.user_id))
     my_team = pick[list(pick.keys())[-1]]
 
 current_gameweek = fpl_custom_functions.get_current_gameweek()
