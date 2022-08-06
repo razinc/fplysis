@@ -12,7 +12,7 @@ required_args.add_argument("-id", "--user_id", type = int, help = "User ID. Can 
 required_args.add_argument("-l", "--log_in", type = bool, help = "Enable login. Email & Password must be set in fpl_credentials.py.")
 args = parser.parse_args()
 if not any(vars(args).values()):
-    parser.error("No arguments provided.")
+    parser.error("Either --user_id or --log_in must be parsed.")
 
 fpl_custom_functions.create_output_dir()
 
