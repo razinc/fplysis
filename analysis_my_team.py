@@ -19,13 +19,16 @@ fpl_custom_functions.create_output_dir()
 if args.log_in == True:
     print("There is an issue with login feature. Please use --user_id instead. For more information: https://github.com/amosbastian/fpl/issues/120")
     exit()
-    my_user = asyncio.run(fpl_custom_functions.get_my_user())
+    my_user = asyncio.run(fpl_custom_functions.get_my_user_login())
     my_full_name = my_user["my_full_name"]
     my_team = my_user["my_team"]
     my_money_remaining = my_user["my_money_remaining"]
 else:
-    pick = asyncio.run(fpl_custom_functions.get_picks_wrapper(args.user_id))
-    my_team = pick[list(pick.keys())[-1]]
+    my_user = asyncio.run(fpl_custom_functions.get_my_user_id(args.user_id))
+    my_full_name = my_user["my_full_name"]
+    my_team = my_user["my_team"]
+    my_team = my_team[list(my_team.keys())[-1]]
+    my_money_remaining = my_user["my_money_remaining"]
 
 current_gameweek = fpl_custom_functions.get_current_gameweek()
 
@@ -38,10 +41,9 @@ for player in tqdm(my_team, desc = "Analysing my team    "):
     
 players_performance = sorted(players_performance, key = lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"], reverse = True)
 with open("output/analysis_my_team.txt", "w") as f:
-    if args.log_in == True: 
-        f.write(f"Name           : {my_full_name}\n")
-        f.write(f"Current GW     : {current_gameweek}\n")
-        f.write(f"Money Remaining: £{my_money_remaining}\n\n")
+    f.write(f"Name           : {my_full_name}\n")
+    f.write(f"Current GW     : {current_gameweek}\n")
+    f.write(f"Money Remaining: {my_money_remaining}\n\n")
     f.write("Performance:\n")
     player_table = fpl_custom_functions.get_player_table(players_performance, current_gameweek, previous_three_gameweeks)
     f.write(player_table)

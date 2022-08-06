@@ -16,7 +16,7 @@ def create_output_dir():
     except(FileExistsError):
         pass
 
-async def get_my_user():
+async def get_my_user_login():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
         await fpl.login(email = fpl_credentials.EMAIL, password = fpl_credentials.PASSWORD)
@@ -28,8 +28,20 @@ async def get_my_user():
 
         return {"my_full_name": full_name,
             "my_team": team,
-            "my_money_remaining": money_remaining
+            "my_money_remaining": f"£{money_remaining}"
             }
+
+async def get_my_user_id(user_id):
+    async with aiohttp.ClientSession() as session:
+        fpl = FPL(session)
+        user = await fpl.get_user(user_id)
+        full_name = f"{user.player_first_name}, {user.player_last_name}"
+        team = await user.get_picks()
+        money_remaining = "This is only available through login."
+        return {"my_full_name": full_name,
+            "my_team": team,
+            "my_money_remaining": money_remaining
+                }
 
 async def get_players_wrapper():
     async with aiohttp.ClientSession() as session:
@@ -79,7 +91,6 @@ def get_next_three_fixtures(player, current_gameweek):
                 difficulty = player.fixtures[i]["difficulty"]
                 team = asyncio.run(get_team_wrapper(team_code))
                 team_nname = team.short_name
-                # next_three_fixtures.append(f"{team_nname} ({where}) ({difficulty})")
                 next_three_fixtures[gw].append(f"{team_nname} ({where}) ({difficulty})") 
         else:
             next_three_fixtures[gw] = ["Blank GW"] 
@@ -186,12 +197,6 @@ async def get_top_10k(league_id):
             for y in pg["results"]:
                 top_10k.append(y["entry"])
     return top_10k[0:10000]
-
-async def get_picks_wrapper(user_id):
-    async with aiohttp.ClientSession() as session:
-        fpl = FPL(session)
-        user = await fpl.get_user(user_id)
-        return await user.get_picks()
 
 def get_run_time(start_time, end_time):
     run_time = end_time - start_time
