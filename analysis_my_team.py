@@ -2,15 +2,27 @@ import asyncio
 import time
 import fpl_custom_functions
 from tqdm import tqdm
+import argparse
 
 start_time = time.time()
 
+parser = argparse.ArgumentParser(description = "Analyse FPL team")
+parser.add_argument("-id", "--team_id", type = int, help = "Team ID. Can be obtained in FPL Points's URL")
+parser.add_argument("-l", "--log_in", type = bool, help = "Enable login. Email & Password must be set in fpl_credentials.py")
+args = parser.parse_args()
+
 fpl_custom_functions.create_output_dir()
 
-my_user = asyncio.run(fpl_custom_functions.get_my_user())
-my_full_name = my_user["my_full_name"]
-my_team = my_user["my_team"]
-my_money_remaining = my_user["my_money_remaining"]
+if args.log_in == True:
+    print("There is an issue with login feature. Please use --team_id instead. For more information: https://github.com/amosbastian/fpl/issues/120")
+    exit()
+    my_user = asyncio.run(fpl_custom_functions.get_my_user())
+    my_full_name = my_user["my_full_name"]
+    my_team = my_user["my_team"]
+    my_money_remaining = my_user["my_money_remaining"]
+else:
+    pick = asyncio.run(fpl_custom_functions.get_picks_async(args.team_id))
+    my_team = pick[list(pick.keys())[-1]]
 
 current_gameweek = fpl_custom_functions.get_current_gameweek()
 
@@ -23,13 +35,14 @@ for player in tqdm(my_team, desc = "Analysing my team    "):
     
 players_performance = sorted(players_performance, key = lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"], reverse = True)
 with open("output/analysis_my_team.txt", "w") as f:
-    f.write(f"Name           : {my_full_name}\n")
-    f.write(f"Current GW     : {current_gameweek}\n")
-    f.write(f"Money Remaining: £{my_money_remaining}\n\n")
+    if args.log_in == True: 
+        f.write(f"Name           : {my_full_name}\n")
+        f.write(f"Current GW     : {current_gameweek}\n")
+        f.write(f"Money Remaining: £{my_money_remaining}\n\n")
     f.write("Performance:\n")
     player_table = fpl_custom_functions.get_player_table(players_performance, current_gameweek, previous_three_gameweeks)
     f.write(player_table)
-
+ 
 not_my_team = []
 players = asyncio.run(fpl_custom_functions.get_all_players())
 for player in tqdm(players, desc = "Analysing all players"):
