@@ -31,31 +31,31 @@ async def get_my_user():
             "my_money_remaining": money_remaining
             }
 
-async def get_all_players():
+async def get_players_wrapper():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
         # TOFIX: "Too Many Requests"
         players = await fpl.get_players(include_summary = True)
     return players
 
-async def get_gameweeks_async():
+async def get_gameweeks_wrapper():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
         return await fpl.get_gameweeks()
 
 def get_current_gameweek():
-    gameweeks = asyncio.run(get_gameweeks_async())
+    gameweeks = asyncio.run(get_gameweeks_wrapper())
     for gameweek in gameweeks:
         if gameweek.finished == True or gameweek.is_current == True:
             current_gameweek = gameweek.id
     return current_gameweek
 
-async def get_player_async(element):
+async def get_player_wrapper(element):
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
         return await fpl.get_player(element, include_summary = True)
 
-async def get_team_async(team_id):
+async def get_team_wrapper(team_id):
     async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
             return await fpl.get_team(team_id)
@@ -77,7 +77,7 @@ def get_next_three_fixtures(player, current_gameweek):
                     team_code = player.fixtures[i]["team_h"]
                     where = "A"
                 difficulty = player.fixtures[i]["difficulty"]
-                team = asyncio.run(get_team_async(team_code))
+                team = asyncio.run(get_team_wrapper(team_code))
                 team_nname = team.short_name
                 # next_three_fixtures.append(f"{team_nname} ({where}) ({difficulty})")
                 next_three_fixtures[gw].append(f"{team_nname} ({where}) ({difficulty})") 
@@ -100,7 +100,7 @@ def get_player_pos(player):
 def get_player_analysis(element, current_gameweek, previous_three_gameweeks):
     player_performance = {}
 
-    player = asyncio.run(get_player_async(element))
+    player = asyncio.run(get_player_wrapper(element))
     web_name = player.web_name
 
     next_three_fixtures = get_next_three_fixtures(player, current_gameweek)
@@ -123,7 +123,7 @@ def get_player_analysis(element, current_gameweek, previous_three_gameweeks):
     latest_price = player.now_cost / 10
     price_change = round(latest_price - player.history[-1]["value"] / 10, 1)
     
-    team = asyncio.run(get_team_async(player.team))
+    team = asyncio.run(get_team_wrapper(player.team))
     team_nname = team.short_name
 
     player_performance[f"{web_name}"] = {
@@ -187,7 +187,7 @@ async def get_top_10k(league_id):
                 top_10k.append(y["entry"])
     return top_10k[0:10000]
 
-async def get_picks_async(user_id):
+async def get_picks_wrapper(user_id):
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
         user = await fpl.get_user(user_id)

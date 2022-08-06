@@ -24,7 +24,7 @@ if args.log_in == True:
     my_team = my_user["my_team"]
     my_money_remaining = my_user["my_money_remaining"]
 else:
-    pick = asyncio.run(fpl_custom_functions.get_picks_async(args.user_id))
+    pick = asyncio.run(fpl_custom_functions.get_picks_wrapper(args.user_id))
     my_team = pick[list(pick.keys())[-1]]
 
 current_gameweek = fpl_custom_functions.get_current_gameweek()
@@ -47,7 +47,7 @@ with open("output/analysis_my_team.txt", "w") as f:
     f.write(player_table)
  
 not_my_team = []
-players = asyncio.run(fpl_custom_functions.get_all_players())
+players = asyncio.run(fpl_custom_functions.get_players_wrapper())
 for player in tqdm(players, desc = "Analysing all players"):
     try:
         player_element = player.history[-1]["element"]
