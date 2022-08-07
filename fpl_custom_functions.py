@@ -37,6 +37,7 @@ async def get_my_user_id(user_id):
         user = await fpl.get_user(user_id)
         full_name = f"{user.player_first_name}, {user.player_last_name}"
         team = await user.get_picks()
+        team = team[list(team.keys())[-1]]
         money_remaining = "This is only available through login."
         return {"my_full_name": full_name,
             "my_team": team,

@@ -27,7 +27,6 @@ else:
     my_user = asyncio.run(fpl_custom_functions.get_my_user_id(args.user_id))
     my_full_name = my_user["my_full_name"]
     my_team = my_user["my_team"]
-    my_team = my_team[list(my_team.keys())[-1]]
     my_money_remaining = my_user["my_money_remaining"]
 
 current_gameweek = fpl_custom_functions.get_current_gameweek()
