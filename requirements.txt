@@ -1,3 +1,6 @@
 aiohttp==3.7.4.post0
+black==22.6.0
 fpl==0.6.28
+pandas==1.4.3
 tqdm==4.62.3
+understat==0.1.6
