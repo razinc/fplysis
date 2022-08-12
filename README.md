@@ -3,6 +3,10 @@
   <img src="image/banner.png" width="500">
 </p>
 
+<p align="center">
+  <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+</p>
+
 Created based on [amosbastian/fpl](https://github.com/amosbastian/fpl) with the intention to make better call in [Fantasy Premier League](https://fantasy.premierleague.com/). 
 
 # Feature
