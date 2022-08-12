@@ -9,6 +9,8 @@ from collections import OrderedDict
 from operator import getitem
 from tqdm import tqdm
 from os import mkdir
+import pandas as pd
+from understat import Understat
 
 def create_output_dir():
     try:
@@ -109,12 +111,68 @@ def get_player_pos(player):
     elif element_type == 4:
         return "FOR"
 
-def get_player_analysis(element, current_gameweek, previous_three_gameweeks):
+def get_fpl_understat_mapping():
+    df_understat = pd.read_csv("https://raw.githubusercontent.com/ChrisMusson/FPL-ID-Map/main/Understat.csv")
+    df_season = pd.read_csv("https://raw.githubusercontent.com/ChrisMusson/FPL-ID-Map/main/FPL/22-23.csv")
+    fpl_understat_mapping = {}
+    for row in df_understat.values:
+        code, first_name, second_name, web_name, understat = row
+        try:
+            understat = int(understat)
+        except ValueError:
+            # player doesn't has understat id
+            pass
+        try:
+            srs_season_code = df_season["code"]
+            player_index = srs_season_code[srs_season_code == code].index[0]
+            player_id = df_season["id"].iloc[player_index]
+        except IndexError:
+            # player is available in df_understat but not in df_season. player is already retired.
+            continue
+        fpl_understat_mapping[player_id] = {"code": code,
+                "first_name": first_name,
+                "second_name": second_name,
+                "web_name": web_name,
+                "understat": understat
+                }
+    return fpl_understat_mapping
+
+def convert_fpl_id_to_understat_id(fpl_id, fpl_understat_mapping):
+    try:
+        return fpl_understat_mapping[fpl_id]["understat"]
+    except KeyError:
+        # no data available in df_season
+        return float("Nan")
+
+async def get_player_grouped_stats_wrapper(take_this):
+    async with aiohttp.ClientSession() as session:
+        understat = Understat(session)
+        return await understat.get_player_grouped_stats(take_this)
+
+async def get_player_grouped_stats_wrapper(take_this):
+    async with aiohttp.ClientSession() as session:
+        understat = Understat(session)
+        return await understat.get_player_grouped_stats(take_this)
+
+# TODO: reduce run time by converting this to async?
+def get_player_xg_xa(player_id):
+    if pd.isna(player_id) == True or player_id == "N/A":
+        xg_xa = {"xG": "N/A",
+            "xA": "N/A"
+            }
+    else:
+        player_grouped_stats = asyncio.run(get_player_grouped_stats_wrapper(player_id))
+        latest_year = list(player_grouped_stats["position"].keys())[0]
+        xg_xa = {"xG": round(float(list(player_grouped_stats["position"][latest_year].values())[0]["xG"]), 2),
+            "xA": round(float(list(player_grouped_stats["position"][latest_year].values())[0]["xA"]), 2)
+            }
+    return xg_xa
+
+def get_player_analysis(element, current_gameweek, previous_three_gameweeks, fpl_understat_mapping):
     player_performance = {}
 
     player = asyncio.run(get_player_wrapper(element))
     web_name = player.web_name
-
     next_three_fixtures = get_next_three_fixtures(player, current_gameweek)
 
     pos = get_player_pos(player)
@@ -123,7 +181,10 @@ def get_player_analysis(element, current_gameweek, previous_three_gameweeks):
     
     expected_points_this = player.ep_this
     expected_points_next = player.ep_next
-    
+
+    understat_id = convert_fpl_id_to_understat_id(element, fpl_understat_mapping)
+    xg_xa = get_player_xg_xa(understat_id)
+
     rounds = [i["round"] for i in player.history]
     for gw in previous_three_gameweeks:
         if gw in rounds:
@@ -143,6 +204,8 @@ def get_player_analysis(element, current_gameweek, previous_three_gameweeks):
             "total_points_previous_three_gameweeks": sum([0 if i == "Blank GW" else i for i in points_previous_three_gameweeks]),
             "expected_points_this": expected_points_this,
             "expected_points_next": expected_points_next,
+            "xG": xg_xa["xG"],
+            "xA": xg_xa["xA"],
             "team": team_nname,
             "pos": pos,
             "next_3_fxts": next_three_fixtures,
@@ -161,6 +224,8 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
     header.append("Total Pts")
     header.append(f"GW{current_gameweek} xP")
     header.append(f"GW{current_gameweek + 1} xP")
+    header.append(f"xG")
+    header.append(f"xA")
     header.append(f"Latest Price")
     header.append("Price Change")
     header.extend([f"GW{current_gameweek + 1} Fxt",
@@ -178,6 +243,8 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
             row.append(v["total_points_previous_three_gameweeks"])
             row.append(v["expected_points_this"])
             row.append(v["expected_points_next"])
+            row.append(v["xG"])
+            row.append(v["xA"])
             row.append("£" + str(v["latest_price"]))
             price_change = v["price_change"]
             row.append(f"£{price_change}")

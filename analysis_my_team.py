@@ -14,8 +14,6 @@ args = parser.parse_args()
 if not any(vars(args).values()):
     parser.error("Either --user_id or --log_in must be parsed.")
 
-fpl_custom_functions.create_output_dir()
-
 if args.log_in == True:
     print("There is an issue with login feature. Please use --user_id instead. For more information: https://github.com/amosbastian/fpl/issues/120")
     exit()
@@ -29,13 +27,17 @@ else:
     my_team = my_user["my_team"]
     my_money_remaining = my_user["my_money_remaining"]
 
+fpl_custom_functions.create_output_dir()
+
 current_gameweek = fpl_custom_functions.get_current_gameweek()
 
 previous_three_gameweeks = fpl_custom_functions.get_previous_three_gameweeks(current_gameweek)
 
+fpl_understat_mapping = fpl_custom_functions.get_fpl_understat_mapping()
+
 players_performance = []
 for player in tqdm(my_team, desc = "Analysing my team    "):
-    player_performance = fpl_custom_functions.get_player_analysis(player["element"], current_gameweek, previous_three_gameweeks)
+    player_performance = fpl_custom_functions.get_player_analysis(player["element"], current_gameweek, previous_three_gameweeks, fpl_understat_mapping)
     players_performance.append(player_performance)
     
 players_performance = sorted(players_performance, key = lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"], reverse = True)
@@ -58,7 +60,7 @@ for player in tqdm(players, desc = "Analysing all players"):
     if player_element in [i["element"] for i in my_team]:
        pass
     else:
-        player_performance = fpl_custom_functions.get_player_analysis(player_element, current_gameweek, previous_three_gameweeks)
+        player_performance = fpl_custom_functions.get_player_analysis(player_element, current_gameweek, previous_three_gameweeks, fpl_understat_mapping)
         not_my_team.append(player_performance)
 with open("output/analysis_my_team.txt", "a") as f:
     # sort based on total points
