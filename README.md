@@ -15,7 +15,10 @@ Created based on [amosbastian/fpl](https://github.com/amosbastian/fpl) with the 
 3. Analyze your league.
 
 # Installation
-`pip install -r requirements.txt`
+`fpl-analysis` uses `poetry` for dependacies management. To install all of them:
+```
+poetry install
+```
 
 # Credentials
 All credentials are stored in `fpl_credentials.py`:
