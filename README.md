@@ -26,6 +26,11 @@ All credentials are stored in `fpl_credentials.py`:
 2. League ID
 
 # Usage
+Enter virtual environment:
+```
+poetry shell
+```
+
 Each of available scripts has a simple cheatsheet by adding `-h` switch.
 * `analysis_my_team.py`
 ```
