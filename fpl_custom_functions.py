@@ -267,7 +267,7 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
         header = ["Name", "Pos", "Team"]
     for gw in previous_three_gameweeks:
         header.append(f"GW{gw} Pts")
-    header.append("Total Pts")
+    header.append("Σ Pts")
     header.append(f"GW{current_gameweek} xP")
     header.append(f"GW{current_gameweek + 1} xP")
     header.append(f"xG")
