@@ -146,7 +146,7 @@ def get_fpl_understat_mapping():
         try:
             srs_season_code = df_season["code"]
             player_index = srs_season_code[srs_season_code == code].index[0]
-            player_id = df_season["id"].iloc[player_index]
+            player_id = df_season["22-23"].iloc[player_index]
         except IndexError:
             # player is available in df_understat but not in df_season. player is already retired.
             continue
