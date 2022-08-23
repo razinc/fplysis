@@ -272,8 +272,8 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
     header.append(f"GW{current_gameweek + 1} xP")
     header.append(f"xG")
     header.append(f"xA")
-    header.append(f"Latest Price")
-    header.append("Price Change")
+    header.append(f"Price")
+    header.append(f"∆")
     header.extend(
         [
             f"GW{current_gameweek + 1} Fxt",
