@@ -29,7 +29,6 @@ async def get_my_user_login():
         team = await user.get_team()
         money_remaining = await user.get_transfers_status()
         money_remaining = money_remaining["bank"] / 10
-
         return {
             "my_full_name": full_name,
             "my_team": team,
@@ -88,11 +87,7 @@ async def get_team_wrapper(team_id):
 
 def get_next_nth_fixtures(player, current_gameweek):
     no_of_next_gw = 5
-    # next_nth_gameweeks = [*range(current_gameweek + 1, current_gameweek + no_of_next_gw + 1, 1)]
-
-    # print(next_nth_gameweeks)
     next_nth_gameweeks = [i for i in range(current_gameweek + 1, current_gameweek + no_of_next_gw + 1)]
-
     next_nth_fixtures = {}
     gameweeks = [i.get("event_name") for i in player.fixtures]
     for gw in next_nth_gameweeks:
