@@ -86,17 +86,17 @@ async def get_team_wrapper(team_id):
         return await fpl.get_team(team_id)
 
 
-def get_next_three_fixtures(player, current_gameweek):
-    next_three_gameweeks = [
-        current_gameweek + 1,
-        current_gameweek + 2,
-        current_gameweek + 3,
-    ]
-    next_three_fixtures = {}
-    gameweeks = [i.get("event_name") for i in player.fixtures]
+def get_next_nth_fixtures(player, current_gameweek):
+    no_of_next_gw = 5
+    # next_nth_gameweeks = [*range(current_gameweek + 1, current_gameweek + no_of_next_gw + 1, 1)]
 
-    for gw in next_three_gameweeks:
-        next_three_fixtures[gw] = []
+    # print(next_nth_gameweeks)
+    next_nth_gameweeks = [i for i in range(current_gameweek + 1, current_gameweek + no_of_next_gw + 1)]
+
+    next_nth_fixtures = {}
+    gameweeks = [i.get("event_name") for i in player.fixtures]
+    for gw in next_nth_gameweeks:
+        next_nth_fixtures[gw] = []
         if f"Gameweek {gw}" in gameweeks:
             indices = [i for i, x in enumerate(gameweeks) if x == f"Gameweek {gw}"]
             for i in indices:
@@ -109,11 +109,10 @@ def get_next_three_fixtures(player, current_gameweek):
                 difficulty = player.fixtures[i]["difficulty"]
                 team = asyncio.run(get_team_wrapper(team_code))
                 team_nname = team.short_name
-                next_three_fixtures[gw].append(f"{team_nname} ({where}) ({difficulty})")
+                next_nth_fixtures[gw].append(f"{team_nname} ({where}) ({difficulty})")
         else:
-            next_three_fixtures[gw] = ["Blank GW"]
-
-    return next_three_fixtures
+            next_nth_fixtures[gw] = ["Blank GW"]
+    return next_nth_fixtures
 
 
 def get_player_pos(player):
@@ -180,7 +179,6 @@ async def get_player_grouped_stats_wrapper(take_this):
         return await understat.get_player_grouped_stats(take_this)
 
 
-# TODO: reduce run time by converting this to async?
 def get_player_xg_xa(player_id):
     if pd.isna(player_id) == True or player_id == "N/A":
         xg_xa = {"xG": "N/A", "xA": "N/A"}
@@ -209,17 +207,17 @@ def get_player_xg_xa(player_id):
 
 
 def get_player_analysis(
-    element, current_gameweek, previous_three_gameweeks, fpl_understat_mapping
+    element, current_gameweek, prev_n_gw, fpl_understat_mapping
 ):
     player_performance = {}
 
     player = asyncio.run(get_player_wrapper(element))
     web_name = player.web_name
-    next_three_fixtures = get_next_three_fixtures(player, current_gameweek)
+    next_nth_fixtures = get_next_nth_fixtures(player, current_gameweek)
 
     pos = get_player_pos(player)
 
-    points_previous_three_gameweeks = []
+    points_prev_n_gw = []
 
     expected_points_this = player.ep_this
     expected_points_next = player.ep_next
@@ -228,12 +226,12 @@ def get_player_analysis(
     xg_xa = get_player_xg_xa(understat_id)
 
     rounds = [i["round"] for i in player.history]
-    for gw in previous_three_gameweeks:
+    for gw in prev_n_gw:
         if gw in rounds:
             i = rounds.index(gw)
-            points_previous_three_gameweeks.append(player.history[i]["total_points"])
+            points_prev_n_gw.append(player.history[i]["total_points"])
         else:
-            points_previous_three_gameweeks.append("Blank GW")
+            points_prev_n_gw.append("Blank GW")
 
     latest_price = player.now_cost / 10
     price_change = round(latest_price - player.history[-1]["value"] / 10, 1)
@@ -242,9 +240,9 @@ def get_player_analysis(
     team_nname = team.short_name
 
     player_performance[f"{web_name}"] = {
-        "points_previous_three_gameweeks": points_previous_three_gameweeks,
-        "total_points_previous_three_gameweeks": sum(
-            [0 if i == "Blank GW" else i for i in points_previous_three_gameweeks]
+        "points_prev_n_gw": points_prev_n_gw,
+        "total_points_prev_n_gw": sum(
+            [0 if i == "Blank GW" else i for i in points_prev_n_gw]
         ),
         "expected_points_this": expected_points_this,
         "expected_points_next": expected_points_next,
@@ -252,20 +250,20 @@ def get_player_analysis(
         "xA": xg_xa["xA"],
         "team": team_nname,
         "pos": pos,
-        "next_3_fxts": next_three_fixtures,
+        "next_nth_fxts": next_nth_fixtures,
         "latest_price": latest_price,
         "price_change": price_change,
     }
     return player_performance
 
 
-def get_player_table(players_performance, current_gameweek, previous_three_gameweeks):
+def get_player_table(players_performance, current_gameweek, prev_n_gw):
     player_table = PrettyTable()
     if "percentage_ownership" in list(players_performance[0].values())[0]:
         header = ["Name", "Pos", "Team", "10k Ownership"]
     else:
         header = ["Name", "Pos", "Team"]
-    for gw in previous_three_gameweeks:
+    for gw in prev_n_gw:
         header.append(f"GW{gw} Pts")
     header.append("Σ Pts")
     header.append(f"GW{current_gameweek} xP")
@@ -274,13 +272,9 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
     header.append(f"xA")
     header.append(f"Price")
     header.append(f"∆")
-    header.extend(
-        [
-            f"GW{current_gameweek + 1} Fxt",
-            f"GW{current_gameweek + 2} Fxt",
-            f"GW{current_gameweek + 3} Fxt",
-        ]
-    )
+    n = len(list(list(players_performance[0].values())[0]["next_nth_fxts"].keys()))
+    for i in range(current_gameweek + 1, current_gameweek + n + 1, 1):
+        header.append(f"GW{i} Fxt")
     player_table.field_names = header
     for i in players_performance:
         for k, v in i.items():
@@ -289,8 +283,8 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
             row.append(v["team"])
             if "percentage_ownership" in v:
                 row.append(v["percentage_ownership"])
-            row.extend(v["points_previous_three_gameweeks"])
-            row.append(v["total_points_previous_three_gameweeks"])
+            row.extend(v["points_prev_n_gw"])
+            row.append(v["total_points_prev_n_gw"])
             row.append(v["expected_points_this"])
             row.append(v["expected_points_next"])
             row.append(v["xG"])
@@ -298,9 +292,9 @@ def get_player_table(players_performance, current_gameweek, previous_three_gamew
             row.append("£" + str(v["latest_price"]))
             price_change = v["price_change"]
             row.append(f"£{price_change}")
-            row.append("\n".join(v["next_3_fxts"][current_gameweek + 1]))
-            row.append("\n".join(v["next_3_fxts"][current_gameweek + 2]))
-            row.append("\n".join(v["next_3_fxts"][current_gameweek + 3]))
+            next_nth_fxts = list(v["next_nth_fxts"].values())
+            for fxt in next_nth_fxts:
+                row.append("\n".join(fxt))
             player_table.add_row(row)
     return player_table.get_string()
 
@@ -334,12 +328,8 @@ def get_run_time(start_time, end_time):
     return run_time
 
 
-def get_previous_three_gameweeks(current_gameweek):
-    previous_three_gameweeks = [
-        current_gameweek,
-        current_gameweek - 1,
-        current_gameweek - 2,
-    ]
-    previous_three_gameweeks = [gw for gw in previous_three_gameweeks if gw > 0]
-    previous_three_gameweeks.reverse()
-    return previous_three_gameweeks
+def get_prev_n_gw(current_gameweek):
+    no_of_prev_gw = 3
+    prev_n_gw = [i for i in range(current_gameweek, current_gameweek - no_of_prev_gw, -1) if i > 0]
+    prev_n_gw.reverse()
+    return prev_n_gw

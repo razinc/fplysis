@@ -42,7 +42,7 @@ fpl_custom_functions.create_output_dir()
 
 current_gameweek = fpl_custom_functions.get_current_gameweek()
 
-previous_three_gameweeks = fpl_custom_functions.get_previous_three_gameweeks(
+prev_n_gw = fpl_custom_functions.get_prev_n_gw(
     current_gameweek
 )
 
@@ -53,14 +53,14 @@ for player in tqdm(my_team, desc="Analysing my team    "):
     player_performance = fpl_custom_functions.get_player_analysis(
         player["element"],
         current_gameweek,
-        previous_three_gameweeks,
+        prev_n_gw,
         fpl_understat_mapping,
     )
     players_performance.append(player_performance)
 
 players_performance = sorted(
     players_performance,
-    key=lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"],
+    key=lambda x: list(x.values())[0]["total_points_prev_n_gw"],
     reverse=True,
 )
 with open("output/analysis_my_team.txt", "w") as f:
@@ -69,7 +69,7 @@ with open("output/analysis_my_team.txt", "w") as f:
     f.write(f"Money Remaining: {my_money_remaining}\n\n")
     f.write("Performance:\n")
     player_table = fpl_custom_functions.get_player_table(
-        players_performance, current_gameweek, previous_three_gameweeks
+        players_performance, current_gameweek, prev_n_gw
     )
     f.write(player_table)
 
@@ -87,7 +87,7 @@ for player in tqdm(players, desc="Analysing all players"):
         player_performance = fpl_custom_functions.get_player_analysis(
             player_element,
             current_gameweek,
-            previous_three_gameweeks,
+            prev_n_gw,
             fpl_understat_mapping,
         )
         not_my_team.append(player_performance)
@@ -96,12 +96,12 @@ with open("output/analysis_my_team.txt", "a") as f:
     f.write("\n\nWatchlist (Total Pts):\n")
     not_my_team_tp = sorted(
         not_my_team,
-        key=lambda x: list(x.values())[0]["total_points_previous_three_gameweeks"],
+        key=lambda x: list(x.values())[0]["total_points_prev_n_gw"],
         reverse=True,
     )
     not_my_team_tp = not_my_team_tp[0:10]
     player_table = fpl_custom_functions.get_player_table(
-        not_my_team_tp, current_gameweek, previous_three_gameweeks
+        not_my_team_tp, current_gameweek, prev_n_gw
     )
     f.write(player_table)
 
@@ -114,7 +114,7 @@ with open("output/analysis_my_team.txt", "a") as f:
     )
     not_my_team_ep = not_my_team_ep[0:10]
     player_table = fpl_custom_functions.get_player_table(
-        not_my_team_ep, current_gameweek, previous_three_gameweeks
+        not_my_team_ep, current_gameweek, prev_n_gw
     )
     f.write(player_table)
 

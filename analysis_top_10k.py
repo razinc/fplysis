@@ -11,7 +11,7 @@ fpl_custom_functions.create_output_dir()
 
 current_gameweek = fpl_custom_functions.get_current_gameweek()
 
-previous_three_gameweeks = fpl_custom_functions.get_previous_three_gameweeks(
+prev_n_gw = fpl_custom_functions.get_prev_n_gw(
     current_gameweek
 )
 
@@ -31,7 +31,7 @@ players_performance = []
 for element, total in tqdm(picks.items(), desc="Analysing top 50 players      "):
     pick = asyncio.run(fpl_custom_functions.get_picks_async(user_id))
     player_performance = fpl_custom_functions.get_player_analysis(
-        element, current_gameweek, previous_three_gameweeks
+        element, current_gameweek, prev_n_gw
     )
     percentage_ownership = round(total / 10000 * 100, 2)
     player_performance[list(player_performance.keys())[0]][
@@ -39,7 +39,7 @@ for element, total in tqdm(picks.items(), desc="Analysing top 50 players      ")
     ] = f"{percentage_ownership}%"
     players_performance.append(player_performance)
 player_table = fpl_custom_functions.get_player_table(
-    players_performance, current_gameweek, previous_three_gameweeks
+    players_performance, current_gameweek, prev_n_gw
 )
 
 with open("output/analysis_top_10k.txt", "w") as f:
