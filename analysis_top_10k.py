@@ -15,12 +15,15 @@ prev_n_gw = fpl_custom_functions.get_prev_n_gw(
     current_gameweek
 )
 
-top_10k = asyncio.run(fpl_custom_functions.get_top_10k(314))
+overall_league_id = 314
+top_10k = asyncio.run(fpl_custom_functions.get_top_10k(overall_league_id))
+
+fpl_understat_mapping = fpl_custom_functions.get_fpl_understat_mapping()
 
 picks = []
 for user_id in tqdm(top_10k, desc="Parsing top 10k managers' pick"):
-    pick = asyncio.run(fpl_custom_functions.get_picks_async(user_id))
-    team = pick[list(pick.keys())[-1]]
+    user = asyncio.run(fpl_custom_functions.get_my_user_id(user_id))
+    team = user["my_team"]
     for i in team:
         picks.append(i["element"])
 picks = dict(Counter(picks))
@@ -29,9 +32,8 @@ picks = dict(islice(picks.items(), 50))
 
 players_performance = []
 for element, total in tqdm(picks.items(), desc="Analysing top 50 players      "):
-    pick = asyncio.run(fpl_custom_functions.get_picks_async(user_id))
     player_performance = fpl_custom_functions.get_player_analysis(
-        element, current_gameweek, prev_n_gw
+        element, current_gameweek, prev_n_gw, fpl_understat_mapping
     )
     percentage_ownership = round(total / 10000 * 100, 2)
     player_performance[list(player_performance.keys())[0]][
