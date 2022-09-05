@@ -1,3 +1,0 @@
-EMAIL = ""
-PASSWORD = ""
-LEAGUE_ID = ""
