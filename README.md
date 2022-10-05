@@ -62,7 +62,7 @@ This script is currently can't be used because there is a problem in `fpl.login`
 # Sample Output
 * `analysis_my_team.py`
 <p align="center">
-  <img src="image/analysis_my_team_sample.png" width="1000">
+  <img src="image/analysis_team_sample.png" width="1000">
 </p>
 
 * `analysis_top_10k.py`
