@@ -5,6 +5,7 @@ import fpl_credentials
 import pandas as pd
 from understat import Understat
 
+
 class Gameweek:
     async def set_attr():
         async with aiohttp.ClientSession() as session:
@@ -14,18 +15,30 @@ class Gameweek:
                 if gameweek.finished == True or gameweek.is_current == True:
                     current_gw = gameweek.id
                 no_of_prev_gws = 3
-                prev_n_gws = [i for i in range(current_gw, current_gw - no_of_prev_gws, -1 ) if i > 0]
+                prev_n_gws = [
+                    i
+                    for i in range(current_gw, current_gw - no_of_prev_gws, -1)
+                    if i > 0
+                ]
                 prev_n_gws.reverse()
                 no_of_next_gws = 5
-                next_n_gws = [i for i in range(current_gw + 1, current_gw + no_of_next_gws + 1)]
-        return {"current_gw": current_gw,
-                "no_of_prev_gws": no_of_prev_gws,
-                "prev_n_gws": prev_n_gws,
-                "no_of_next_gws": no_of_next_gws,
-                "next_n_gws": next_n_gws}
-    current_gw, no_of_prev_gws, prev_n_gws, no_of_next_gws, next_n_gws = asyncio.run(set_attr()).values()
+                next_n_gws = [
+                    i for i in range(current_gw + 1, current_gw + no_of_next_gws + 1)
+                ]
+        return {
+            "current_gw": current_gw,
+            "no_of_prev_gws": no_of_prev_gws,
+            "prev_n_gws": prev_n_gws,
+            "no_of_next_gws": no_of_next_gws,
+            "next_n_gws": next_n_gws,
+        }
+
+    current_gw, no_of_prev_gws, prev_n_gws, no_of_next_gws, next_n_gws = asyncio.run(
+        set_attr()
+    ).values()
     next_gw = current_gw + 1
     season = "2022"
+
 
 class FplToUnderstat:
     def set_attr():
@@ -58,6 +71,7 @@ class FplToUnderstat:
                 "understat": understat,
             }
         return mapping
+
     mapping = set_attr()
 
     # async def get_player_grouped_stats(understat_id):
