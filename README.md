@@ -60,7 +60,7 @@ This script is currently can't be used because there is a problem in `fpl.login`
 This script is currently can't be used because there is a problem in `fpl.login` function. This function is required to grab data from league.
 
 # Sample Output
-* `analysis_my_team.py`
+* `analysis_team.py`
 <p align="center">
   <img src="image/analysis_team_sample.png" width="1000">
 </p>
