@@ -22,8 +22,10 @@ poetry install
 
 # Credentials
 All credentials are stored in `fpl_credentials.py`:
-1. Username & password
-2. League ID
+```python
+EMAIL = ""
+PASSWORD = "
+```
 
 # Usage
 Enter virtual environment:
