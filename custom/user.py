@@ -2,7 +2,6 @@ import aiohttp
 import asyncio
 from fpl import FPL
 from custom.util import AnalTeamArg
-import fpl_credentials
 
 
 class User:
@@ -10,6 +9,7 @@ class User:
         async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
             if AnalTeamArg.log_in == True:
+                import fpl_credentials
                 await fpl.login(
                     email=fpl_credentials.EMAIL, password=fpl_credentials.PASSWORD
                 )
