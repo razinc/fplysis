@@ -10,6 +10,7 @@ class User:
             fpl = FPL(session)
             if AnalTeamArg.log_in == True:
                 import fpl_credentials
+
                 await fpl.login(
                     email=fpl_credentials.EMAIL, password=fpl_credentials.PASSWORD
                 )
