@@ -1,14 +1,14 @@
 import aiohttp
 import asyncio
 from fpl import FPL
-from custom.util import AnalTeamArg
+from custom.util import UserAuthArg
 
 
 class User:
     async def set_attr():
         async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
-            if AnalTeamArg.log_in == True:
+            if UserAuthArg.log_in == True:
                 import fpl_credentials
 
                 await fpl.login(
@@ -19,7 +19,7 @@ class User:
                 transfers_status = await user.get_transfers_status()
                 in_the_bank = transfers_status["bank"] / 10
             else:
-                user = await fpl.get_user(AnalTeamArg.user_id)
+                user = await fpl.get_user(UserAuthArg.user_id)
                 picks = await user.get_picks()
                 team = [i["element"] for i in picks[list(picks.keys())[-1]]]
                 in_the_bank = "This is only available through login"
