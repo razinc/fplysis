@@ -1,22 +1,22 @@
-from custom.util import MkdirOutput
+import custom.util
 from custom.user import User
-from custom.players import Players
 from custom.constant import Gameweek
-
-MkdirOutput.create_output_dir()
+from custom.players import Players
 
 with open("output/analysis_team.txt", "w") as f:
-    f.write(f"Name           : {User.name}\n")
+    user = User(log_in = custom.util.UserAuthArg.log_in, user_id = custom.util.UserAuthArg.user_id)
+    
+    f.write(f"Name           : {user.name}\n")
     f.write(f"Current GW     : {Gameweek.current_gw}\n")
-    f.write(f"Money Remaining: {User.in_the_bank}\n\n")
+    f.write(f"Money Remaining: {user.in_the_bank}\n\n")
 
-    user_players = Players(fpl_ids=User.team)
+    user_players = Players(fpl_ids=user.team)
 
     user_perf = user_players.sort_by_total_pts_prev_n_gw()
     f.write("Performance:\n")
     f.write(user_players.get_table(stats=user_perf))
 
-    not_user_players = Players(skips=User.team)
+    not_user_players = Players(skips=user.team)
 
     not_user_perf = not_user_players.sort_by_total_pts_prev_n_gw()
     f.write("\n\nWatchlist (Performance):\n")

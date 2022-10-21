@@ -1,16 +1,19 @@
 import aiohttp
 import asyncio
 from fpl import FPL
-from custom.util import UserAuthArg
 
 
 class User:
-    async def set_attr():
+    def __init__(self, log_in, user_id):
+        self.log_in = log_in
+        self.user_id = user_id
+        asyncio.run(self.set_attr())
+
+    async def set_attr(self):
         async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
-            if UserAuthArg.log_in == True:
+            if self.log_in == True:
                 import fpl_credentials
-
                 await fpl.login(
                     email=fpl_credentials.EMAIL, password=fpl_credentials.PASSWORD
                 )
@@ -19,18 +22,11 @@ class User:
                 transfers_status = await user.get_transfers_status()
                 in_the_bank = transfers_status["bank"] / 10
             else:
-                user = await fpl.get_user(UserAuthArg.user_id)
+                user = await fpl.get_user(self.user_id)
                 picks = await user.get_picks()
                 team = [i["element"] for i in picks[list(picks.keys())[-1]]]
                 in_the_bank = "This is only available through login"
-            name = f"{user.player_first_name}, {user.player_last_name}"
-            team_name = user.name
-            team = team
-            return {
-                "name": name,
-                "team_name": team_name,
-                "team": team,
-                "in_the_bank": in_the_bank,
-            }
-
-    name, team_name, team, in_the_bank = asyncio.run(set_attr()).values()
+            self.name = f"{user.player_first_name}, {user.player_last_name}"
+            self.team_name = user.name
+            self.team = team
+            self.in_the_bank = in_the_bank

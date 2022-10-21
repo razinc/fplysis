@@ -9,6 +9,7 @@ class MkdirOutput:
         except (FileExistsError):
             pass
 
+    create_output_dir()
 
 class UserAuthArg:
     def set_attr():
