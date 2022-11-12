@@ -13,17 +13,22 @@ from itertools import islice
 
 
 class Players:
-    def __init__(self, fpl_ids=None, skips=[]):
-        self.fpl_ids = fpl_ids
+    def __init__(self, fpl_ids=None, skips=[], ownership=None):
+        if ownership is not None:
+            self.fpl_ids = ownership.keys()
+        else:    
+            self.fpl_ids = fpl_ids
         self.skips = skips
-        asyncio.run(self.set_attr())
+        asyncio.run(self.set_attr(ownership))
 
-    async def set_attr(self):
+    async def set_attr(self, ownership):
         stats = {}
         async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
             players = await fpl.get_players(self.fpl_ids, include_summary=True)
-            if self.fpl_ids == None:
+            if ownership is not None:
+                desc = "Parsing top ownership players "
+            elif self.fpl_ids is None:
                 desc = "Analysing all players"
             else:
                 desc = "Analysing user's team"
@@ -49,7 +54,7 @@ class Players:
                     pos = "MID"
                 if element_type == 4:
                     pos = "FOR"
-
+                
                 latest_price = player.now_cost / 10
                 try:
                     price_change = round(
@@ -60,7 +65,7 @@ class Players:
                     pass
 
                 try:
-                    understat_id = FplToUnderstat.mapping[fpl_id]["understat"]
+                    understat_id = FplToUnderstat.MAPPING[fpl_id]["understat"]
                 except KeyError:
                     # no data available in df_season
                     understat_id = float("Nan")
@@ -73,7 +78,7 @@ class Players:
                     player_grouped_stats = await understat.get_player_grouped_stats(
                         understat_id
                     )
-                    if player_grouped_stats["season"][0]["season"] == Gameweek.season:
+                    if player_grouped_stats["season"][0]["season"] == Gameweek.SEASON:
                         xg = round(float(player_grouped_stats["season"][0]["xG"]), 2)
                         xa = round(float(player_grouped_stats["season"][0]["xA"]), 2)
                         sum_xg_xa = xg + xa
@@ -86,7 +91,7 @@ class Players:
                 total_pts_prev_n_gw = 0
                 history = player.history
                 rounds = [i["round"] for i in history]
-                for gw in Gameweek.prev_n_gws:
+                for gw in Gameweek.PREV_N_GWS:
                     if gw in rounds:
                         i = rounds.index(gw)
                         gw_pts = history[i]["total_points"]
@@ -99,7 +104,7 @@ class Players:
                 fixture_difficulty_sum = 0
                 total_games = 0
                 gameweeks = [i.get("event_name") for i in player.fixtures]
-                for gw in Gameweek.next_n_gws:
+                for gw in Gameweek.NEXT_N_GWS:
                     fixtures[gw] = []
                     if f"Gameweek {gw}" in gameweeks:
                         indices = [
@@ -140,6 +145,10 @@ class Players:
                     "fixtures": fixtures,
                     "fixture_difficulty_avg": fixture_difficulty_sum / total_games,
                 }
+                
+                if ownership is not None:
+                    stats[fpl_id]["ownership"] = f"{ownership[fpl_id]}%"
+
             self.stats = stats
 
     def sort_by_total_pts_prev_n_gw(self):
@@ -172,20 +181,23 @@ class Players:
         )
 
     def get_table(self, stats=None, top=None):
-        table = PrettyTable()
-        header = (
-            ["Name", "Team", "Pos", "Price", "xG", "xA"]
-            + [f"GW{gw} Pts" for gw in Gameweek.prev_n_gws]
-            + ["Σ Pts"]
-            + [f"GW{Gameweek.next_gw} xP"]
-            + [f"GW{gw} Fxt" for gw in Gameweek.next_n_gws]
-            + ["FDA"]
-        )
-        table.field_names = header
         if stats == None:
             d = self.stats
         else:
             d = stats
+        table = PrettyTable()
+        header = (
+            ["Name", "Team", "Pos", "Price", "xG", "xA"]
+            + [f"GW{gw} Pts" for gw in Gameweek.PREV_N_GWS]
+            + ["Σ Pts"]
+            + [f"GW{Gameweek.NEXT_GW} xP"]
+            + [f"GW{gw} Fxt" for gw in Gameweek.NEXT_N_GWS]
+            + ["FDA"]
+        )
+        if "ownership" in list(dict(islice(d.items(), 1)).values())[0]:
+            header.append("Top 10k Ownership")
+
+        table.field_names = header
         for k, v in dict(islice(d.items(), top)).items():
             row = (
                 [
@@ -203,5 +215,7 @@ class Players:
             for fixture in list(v["fixtures"].values()):
                 row.append("\n".join(fixture))
             row.append(v["fixture_difficulty_avg"])
+            if "ownership" in list(dict(islice(d.items(), 1)).values())[0]:
+                row.append(v["ownership"])
             table.add_row(row)
         return table.get_string()

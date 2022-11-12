@@ -7,7 +7,7 @@ with open("output/analysis_team.txt", "w") as f:
     user = User(log_in = custom.util.UserAuthArg.log_in, user_id = custom.util.UserAuthArg.user_id)
     
     f.write(f"Name           : {user.name}\n")
-    f.write(f"Current GW     : {Gameweek.current_gw}\n")
+    f.write(f"Current GW     : {Gameweek.CURRENT_GW}\n")
     f.write(f"Money Remaining: {user.in_the_bank}\n\n")
 
     user_players = Players(fpl_ids=user.team)
@@ -23,8 +23,9 @@ with open("output/analysis_team.txt", "w") as f:
     f.write(not_user_players.get_table(stats=not_user_perf, top=10))
 
     not_user_fda = not_user_players.sort_by_fda()
-    f.write("\n\nWatchlist (Fixture):\n")
-    f.write(not_user_players.get_table(stats=not_user_fda, top=10))
+    if len(not_user_fda) > 0:
+        f.write("\n\nWatchlist (Fixture):\n")
+        f.write(not_user_players.get_table(stats=not_user_fda, top=10))
 
     not_user_sum_xg_xa = not_user_players.sort_by_sum_xg_xa()
     f.write("\n\nWatchlist (xG + xA):\n")

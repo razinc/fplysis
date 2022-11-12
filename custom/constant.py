@@ -6,6 +6,8 @@ import pandas as pd
 from understat import Understat
 
 
+OVERALL_LEAGUE_ID = 314
+
 class Gameweek:
     async def set_attr():
         async with aiohttp.ClientSession() as session:
@@ -26,18 +28,18 @@ class Gameweek:
                     i for i in range(current_gw + 1, current_gw + no_of_next_gws + 1)
                 ]
         return {
-            "current_gw": current_gw,
-            "no_of_prev_gws": no_of_prev_gws,
-            "prev_n_gws": prev_n_gws,
-            "no_of_next_gws": no_of_next_gws,
-            "next_n_gws": next_n_gws,
+            "CURRENT_GW": current_gw,
+            "NO_OF_PREV_GWS": no_of_prev_gws,
+            "PREV_N_GWS": prev_n_gws,
+            "NO_OF_NEXT_GWS": no_of_next_gws,
+            "NEXT_N_GWS": next_n_gws,
         }
 
-    current_gw, no_of_prev_gws, prev_n_gws, no_of_next_gws, next_n_gws = asyncio.run(
+    CURRENT_GW, NO_OF_PREV_GWS, PREV_N_GWS, NO_OF_NEXT_GWS, NEXT_N_GWS = asyncio.run(
         set_attr()
     ).values()
-    next_gw = current_gw + 1
-    season = "2022"
+    NEXT_GW = CURRENT_GW + 1
+    SEASON = "2022"
 
 
 class FplToUnderstat:
@@ -48,7 +50,7 @@ class FplToUnderstat:
         df_season = pd.read_csv(
             "https://raw.githubusercontent.com/ChrisMusson/FPL-ID-Map/main/FPL/22-23.csv"
         )
-        mapping = {}
+        MAPPING = {}
         for row in df_understat.values:
             code, first_name, second_name, web_name, understat = row
             try:
@@ -63,16 +65,16 @@ class FplToUnderstat:
             except IndexError:
                 # player is available in df_understat but not in df_season. player is already retired.
                 continue
-            mapping[player_id] = {
+            MAPPING[player_id] = {
                 "code": code,
                 "first_name": first_name,
                 "second_name": second_name,
                 "web_name": web_name,
                 "understat": understat,
             }
-        return mapping
+        return MAPPING
 
-    mapping = set_attr()
+    MAPPING = set_attr()
 
     # async def get_player_grouped_stats(understat_id):
     #     async with aiohttp.ClientSession() as session:

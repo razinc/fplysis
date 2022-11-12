@@ -4,7 +4,7 @@ from fpl import FPL
 
 
 class User:
-    def __init__(self, log_in, user_id):
+    def __init__(self, log_in = None, user_id = None):
         self.log_in = log_in
         self.user_id = user_id
         asyncio.run(self.set_attr())
