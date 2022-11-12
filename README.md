@@ -57,4 +57,4 @@ Each of available scripts have a simple cheatsheet by adding `-h` switch.
 </p>
 
 # Miscellaneous
-[Additional resources](https://fplform.com/fpl-resources#fpl-data-tools)
+[Additional resources](https://fplform.com/fpl-resources#fpl-data-tools).
