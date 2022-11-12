@@ -55,3 +55,6 @@ Each of available scripts have a simple cheatsheet by adding `-h` switch.
 <p align="center">
   <img src="image/analysis_top_10k_sample.png" width="1000">
 </p>
+
+# Miscellaneous
+[Additional resources](https://fplform.com/fpl-resources#fpl-data-tools)
