@@ -1,7 +1,6 @@
 import aiohttp
 import asyncio
 from fpl import FPL
-import fpl_credentials
 import pandas as pd
 from understat import Understat
 
