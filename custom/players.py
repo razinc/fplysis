@@ -143,7 +143,7 @@ class Players:
                     "ep_this": float(player.ep_this),
                     "ep_next": float(player.ep_next),
                     "fixtures": fixtures,
-                    "fixture_difficulty_avg": fixture_difficulty_sum / total_games,
+                    "fixture_difficulty_avg": round(fixture_difficulty_sum / total_games, 1),
                 }
                 
                 if ownership is not None:
