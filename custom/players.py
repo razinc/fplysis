@@ -87,18 +87,19 @@ class Players:
                         xa = "N/A"
                         sum_xg_xa = 0
 
-                pts_prev_n_gw = []
-                total_pts_prev_n_gw = 0
                 history = player.history
                 rounds = [i["round"] for i in history]
+                pts_prev_n_gw= {}
+                total_pts_prev_n_gw = 0
                 for gw in Gameweek.PREV_N_GWS:
-                    if gw in rounds:
-                        i = rounds.index(gw)
-                        gw_pts = history[i]["total_points"]
-                        pts_prev_n_gw.append(gw_pts)
-                        total_pts_prev_n_gw = total_pts_prev_n_gw + gw_pts
+                    if gw not in rounds:
+                        pts_prev_n_gw[gw] = "Blank GW"
+                        continue
                     else:
-                        pts_prev_n_gw.append("Blank GW")
+                        pts_prev_n_gw[gw] = 0
+                    for i in [i for i, j in enumerate(rounds) if j == gw]:
+                        pts_prev_n_gw[gw] = pts_prev_n_gw[gw] + history[i]["total_points"]
+                        total_pts_prev_n_gw = total_pts_prev_n_gw + history[i]["total_points"]
 
                 fixtures = {}
                 fixture_difficulty_sum = 0
@@ -145,7 +146,7 @@ class Players:
                     "fixtures": fixtures,
                     "fixture_difficulty_avg": round(fixture_difficulty_sum / total_games, 1),
                 }
-                
+
                 if ownership is not None:
                     stats[fpl_id]["ownership"] = f"{ownership[fpl_id]}%"
 
@@ -208,7 +209,7 @@ class Players:
                     v["xg"],
                     v["xa"],
                 ]
-                + v["pts_prev_n_gw"]
+                + list(v["pts_prev_n_gw"].values())
                 + [v["total_pts_prev_n_gw"], v["ep_next"]]
             )
             fixtures = v["fixtures"]
