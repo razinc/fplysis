@@ -9,6 +9,16 @@
 
 Make better calls in [Fantasy Premier League](https://fantasy.premierleague.com/). 
 
+# The Zen of FPL
+1. Fixtures over form.
+2. Transfers are precious. 
+3. Ignore price rises.
+4. Avoid confirmation of bias.
+5. Luck is a factor.
+6. Utilise xG data.
+
+Read Fabio Forges full interview [here](https://fantasyfootballcommunity.com/tips-from-the-worlds-best-fpl-manager/).
+
 # Feature
 1. Analyze team and sort by points.
 2. Analyze top 10k teams.
@@ -16,60 +26,35 @@ Make better calls in [Fantasy Premier League](https://fantasy.premierleague.com/
 
 # Installation
 `fpl-analysis` uses `poetry` for dependacies management. To install all of them:
-```
+```bash
 poetry install
 ```
 
 # Credentials
 All credentials are stored in `fpl_credentials.py`:
-1. Username & password
-2. League ID
+```python
+EMAIL = ""
+PASSWORD = "
+```
 
 # Usage
 Enter virtual environment:
-```
+```bash
 poetry shell
 ```
 
-Each of available scripts has a simple cheatsheet by adding `-h` switch.
-* `analysis_my_team.py`
-```
-> python analysis_my_team.py -h
-usage: analysis_my_team.py [-h] [-id USER_ID] [-l LOG_IN]
-
-Analyse FPL team
-
-optional arguments:
-  -h, --help            show this help message and exit
-
-at least one of these arguments are required:
-  -id USER_ID, --user_id USER_ID
-                        User ID. Can be obtained in FPL Points's URL.
-  -l LOG_IN, --log_in LOG_IN
-                        Enable login. Email & Password must be set in fpl_credentials.py.
-```
-
-* `analysis_top_10k.py`
-
-
-This script is currently can't be used because there is a problem in `fpl.login` function. This function is required to grab data from league.
-
-* `analysis_league.py`
-
-
-This script is currently can't be used because there is a problem in `fpl.login` function. This function is required to grab data from league.
+Each of available scripts have a simple cheatsheet by adding `-h` switch.
 
 # Sample Output
-* `analysis_my_team.py`
+* `analysis_team.py`
 <p align="center">
-  <img src="image/analysis_my_team_sample.png" width="1000">
+  <img src="image/analysis_team_sample.png" width="1000">
 </p>
 
 * `analysis_top_10k.py`
 <p align="center">
-  <img src="image/analysis_top_10k_sample.png " width="1000">
+  <img src="image/analysis_top_10k_sample.png" width="1000">
 </p>
 
-# Upcoming Features
-- [ ] Discord bots
-- [ ] DGWs suggestions
+# Miscellaneous
+[Additional resources](https://fplform.com/fpl-resources#fpl-data-tools).
