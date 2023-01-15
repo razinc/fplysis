@@ -34,7 +34,7 @@ poetry install
 All credentials are stored in `fpl_credentials.py`:
 ```python
 EMAIL = ""
-PASSWORD = "
+PASSWORD = ""
 ```
 
 # Usage
