@@ -181,11 +181,7 @@ class Players:
             )
         )
 
-    def get_table(self, stats=None, top=None):
-        if stats == None:
-            d = self.stats
-        else:
-            d = stats
+    def get_table(self, top=None):
         table = PrettyTable()
         header = (
             ["Name", "Team", "Pos", "Price", "xG", "xA"]
@@ -195,11 +191,11 @@ class Players:
             + [f"GW{gw} Fxt" for gw in Gameweek.NEXT_N_GWS]
             + ["FDA"]
         )
-        if "ownership" in list(dict(islice(d.items(), 1)).values())[0]:
+        if "ownership" in list(dict(islice(self.stats.items(), 1)).values())[0]:
             header.append("Top 10k Ownership")
 
         table.field_names = header
-        for k, v in dict(islice(d.items(), top)).items():
+        for k, v in dict(islice(self.stats.items(), top)).items():
             row = (
                 [
                     v["web_name"],
@@ -216,7 +212,7 @@ class Players:
             for fixture in list(v["fixtures"].values()):
                 row.append("\n".join(fixture))
             row.append(v["fixture_difficulty_avg"])
-            if "ownership" in list(dict(islice(d.items(), 1)).values())[0]:
+            if "ownership" in list(dict(islice(self.stats.items(), 1)).values())[0]:
                 row.append(v["ownership"])
             table.add_row(row)
         return table.get_string()
