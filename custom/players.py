@@ -153,7 +153,7 @@ class Players:
             self.stats = stats
 
     def sort_by_total_pts_prev_n_gw(self):
-        return OrderedDict(
+        self.stats =  OrderedDict(
             sorted(
                 self.stats.items(),
                 key=lambda x: getitem(x[1], "total_pts_prev_n_gw"),
@@ -162,11 +162,11 @@ class Players:
         )
 
     def sort_by_fda(self):
-        perf = self.sort_by_total_pts_prev_n_gw()
-        return {k: v for k, v in perf.items() if v["fixture_difficulty_avg"] < 2.4}
+        self.sort_by_total_pts_prev_n_gw()
+        self.stats = {k: v for k, v in self.stats.items() if v["fixture_difficulty_avg"] < 2.4}
 
     def sort_by_sum_xg_xa(self):
-        return OrderedDict(
+        self.stats =  OrderedDict(
             sorted(
                 self.stats.items(),
                 key=lambda x: getitem(x[1], "sum_xg_xa"),
@@ -175,7 +175,7 @@ class Players:
         )
 
     def sort_by_xpts(self):
-        return OrderedDict(
+        self.stats = OrderedDict(
             sorted(
                 self.stats.items(), key=lambda x: getitem(x[1], "ep_next"), reverse=True
             )
