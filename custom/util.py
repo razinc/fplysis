@@ -11,10 +11,16 @@ class MkdirOutput:
 
     create_output_dir()
 
+
 class UserAuthArg:
     def set_attr():
         parser = argparse.ArgumentParser(description="make better transfer in FPL")
-        parser.add_argument("-id", "--user_id", type=int, help="user ID. only applicable for analysing team, to analyse league: log_in arg must be passed")
+        parser.add_argument(
+            "-id",
+            "--user_id",
+            type=int,
+            help="user ID. only applicable for analysing team, to analyse league: log_in arg must be passed",
+        )
         parser.add_argument(
             "-l",
             "--log_in",

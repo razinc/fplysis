@@ -7,6 +7,7 @@ from understat import Understat
 
 OVERALL_LEAGUE_ID = 314
 
+
 class Gameweek:
     async def set_attr():
         async with aiohttp.ClientSession() as session:

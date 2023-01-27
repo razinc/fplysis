@@ -16,7 +16,7 @@ class Players:
     def __init__(self, fpl_ids=None, skips=[], ownership=None):
         if ownership is not None:
             self.fpl_ids = ownership.keys()
-        else:    
+        else:
             self.fpl_ids = fpl_ids
         self.skips = skips
         asyncio.run(self.set_attr(ownership))
@@ -54,7 +54,7 @@ class Players:
                     pos = "MID"
                 if element_type == 4:
                     pos = "FOR"
-                
+
                 latest_price = player.now_cost / 10
                 try:
                     price_change = round(
@@ -89,7 +89,7 @@ class Players:
 
                 history = player.history
                 rounds = [i["round"] for i in history]
-                pts_prev_n_gw= {}
+                pts_prev_n_gw = {}
                 total_pts_prev_n_gw = 0
                 for gw in Gameweek.PREV_N_GWS:
                     if gw not in rounds:
@@ -98,8 +98,12 @@ class Players:
                     else:
                         pts_prev_n_gw[gw] = 0
                     for i in [i for i, j in enumerate(rounds) if j == gw]:
-                        pts_prev_n_gw[gw] = pts_prev_n_gw[gw] + history[i]["total_points"]
-                        total_pts_prev_n_gw = total_pts_prev_n_gw + history[i]["total_points"]
+                        pts_prev_n_gw[gw] = (
+                            pts_prev_n_gw[gw] + history[i]["total_points"]
+                        )
+                        total_pts_prev_n_gw = (
+                            total_pts_prev_n_gw + history[i]["total_points"]
+                        )
 
                 fixtures = {}
                 fixture_difficulty_sum = 0
@@ -144,7 +148,9 @@ class Players:
                     "ep_this": float(player.ep_this),
                     "ep_next": float(player.ep_next),
                     "fixtures": fixtures,
-                    "fixture_difficulty_avg": round(fixture_difficulty_sum / total_games, 1),
+                    "fixture_difficulty_avg": round(
+                        fixture_difficulty_sum / total_games, 1
+                    ),
                 }
 
                 if ownership is not None:
@@ -153,7 +159,7 @@ class Players:
             self.stats = stats
 
     def sort_by_total_pts_prev_n_gw(self):
-        self.stats =  OrderedDict(
+        self.stats = OrderedDict(
             sorted(
                 self.stats.items(),
                 key=lambda x: getitem(x[1], "total_pts_prev_n_gw"),
@@ -163,10 +169,12 @@ class Players:
 
     def sort_by_fda(self):
         self.sort_by_total_pts_prev_n_gw()
-        self.stats = {k: v for k, v in self.stats.items() if v["fixture_difficulty_avg"] < 2.4}
+        self.stats = {
+            k: v for k, v in self.stats.items() if v["fixture_difficulty_avg"] < 2.4
+        }
 
     def sort_by_sum_xg_xa(self):
-        self.stats =  OrderedDict(
+        self.stats = OrderedDict(
             sorted(
                 self.stats.items(),
                 key=lambda x: getitem(x[1], "sum_xg_xa"),
