@@ -1,0 +1,14 @@
+name: pytest
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v3
+      - run: pip install poetry
+      - run: poetry install
+      - run: pip install pytest
+      - run: pytest .
