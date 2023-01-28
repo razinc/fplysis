@@ -10,5 +10,4 @@ jobs:
       - uses: actions/setup-python@v3
       - run: pip install poetry
       - run: poetry install
-      - run: pip install pytest
       - run: poetry run pytest
