@@ -10,12 +10,12 @@
 Make better calls in [Fantasy Premier League](https://fantasy.premierleague.com/). 
 
 # The Zen of FPL
-1. Fixtures over form.
-2. Transfers are precious. 
-3. Ignore price rises.
-4. Avoid confirmation of bias.
-5. Luck is a factor.
-6. Utilise xG data.
+* Fixtures over form.
+* Transfers are precious. 
+* Ignore price rises.
+* Avoid confirmation of bias.
+* Luck is a factor.
+* Utilise xG data.
 
 Read Fabio Forges full interview [here](https://fantasyfootballcommunity.com/tips-from-the-worlds-best-fpl-manager/).
 
