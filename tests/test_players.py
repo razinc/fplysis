@@ -10,7 +10,7 @@ def test_players(monkeypatch):
 
     fpl_id = 427
     players = Players(fpl_ids=[fpl_id])
-    
+
     assert players.stats[fpl_id]["web_name"] == "Kane"
     assert players.stats[fpl_id]["team_short_name"] == "TOT"
     assert players.stats[fpl_id]["pos"] == "FOR"

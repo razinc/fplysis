@@ -6,7 +6,7 @@ class MkdirOutput:
     def create_output_dir():
         try:
             mkdir("output")
-        except (FileExistsError):
+        except FileExistsError:
             pass
 
     create_output_dir()
