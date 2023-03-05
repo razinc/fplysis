@@ -1,9 +1,9 @@
-import aiohttp
 import asyncio
-from fpl import FPL
-import pandas as pd
-from understat import Understat
 
+import aiohttp
+import pandas as pd
+from fpl import FPL
+from understat import Understat
 
 OVERALL_LEAGUE_ID = 314
 

@@ -1,5 +1,5 @@
-from os import mkdir
 import argparse
+from os import mkdir
 
 
 class MkdirOutput:

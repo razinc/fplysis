@@ -1,15 +1,16 @@
-import aiohttp
 import asyncio
+from collections import OrderedDict
+from itertools import islice
+from operator import getitem
+
+import aiohttp
 import pandas as pd
 from fpl import FPL
-from custom.constant import Gameweek
-from custom.constant import FplToUnderstat
+from prettytable import PrettyTable
 from tqdm import tqdm
 from understat import Understat
-from prettytable import PrettyTable
-from collections import OrderedDict
-from operator import getitem
-from itertools import islice
+
+from custom.constant import FplToUnderstat, Gameweek
 
 
 class Players:

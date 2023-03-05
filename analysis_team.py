@@ -1,8 +1,9 @@
+from copy import deepcopy
+
 import custom.util
-from custom.user import User
 from custom.constant import Gameweek
 from custom.players import Players
-from copy import deepcopy
+from custom.user import User
 
 with open("output/analysis_team.txt", "w") as f:
     user = User(

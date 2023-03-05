@@ -1,10 +1,12 @@
-import aiohttp
 import asyncio
-from fpl import FPL
-import fpl_credentials
-from tqdm import tqdm
 from collections import Counter
 from itertools import islice
+
+import aiohttp
+import fpl_credentials
+from fpl import FPL
+from tqdm import tqdm
+
 from custom.constant import OVERALL_LEAGUE_ID
 
 
