@@ -79,7 +79,7 @@ class Players:
                     player_grouped_stats = await understat.get_player_grouped_stats(
                         understat_id
                     )
-                    if player_grouped_stats["season"][0]["season"] == Gameweek.SEASON:
+                    if len(player_grouped_stats["season"]) > 0 and player_grouped_stats["season"][0]["season"] == Gameweek.SEASON:
                         xg = round(float(player_grouped_stats["season"][0]["xG"]), 2)
                         xa = round(float(player_grouped_stats["season"][0]["xA"]), 2)
                         sum_xg_xa = xg + xa
