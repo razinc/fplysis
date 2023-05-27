@@ -25,7 +25,7 @@ class Gameweek:
                 prev_n_gws.reverse()
                 no_of_next_gws = 5
                 next_n_gws = [
-                    i for i in range(current_gw + 1, current_gw + no_of_next_gws + 1)
+                    i for i in range(current_gw + 1, current_gw + no_of_next_gws + 1) if i <= 38
                 ]
         return {
             "CURRENT_GW": current_gw,
