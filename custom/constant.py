@@ -24,7 +24,9 @@ class Gameweek:
                 prev_n_gws.reverse()
                 no_of_next_gws = 5
                 next_n_gws = [
-                    i for i in range(current_gw + 1, current_gw + no_of_next_gws + 1) if i <= 38
+                    i
+                    for i in range(current_gw + 1, current_gw + no_of_next_gws + 1)
+                    if i <= 38
                 ]
         return {
             "CURRENT_GW": current_gw,
@@ -38,8 +40,6 @@ class Gameweek:
         set_attr()
     ).values()
     NEXT_GW = CURRENT_GW + 1
-
-
 
     # async def get_player_grouped_stats(understat_id):
     #     async with aiohttp.ClientSession() as session:

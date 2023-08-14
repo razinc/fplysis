@@ -64,7 +64,6 @@ class Players:
                 except IndexError:
                     pass
 
-
                 history = player.history
                 rounds = [i["round"] for i in history]
                 pts_prev_n_gw = {}
