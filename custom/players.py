@@ -8,9 +8,8 @@ import pandas as pd
 from fpl import FPL
 from prettytable import PrettyTable
 from tqdm import tqdm
-from understat import Understat
 
-from custom.constant import FplToUnderstat, Gameweek
+from custom.constant import Gameweek
 
 
 class Players:
@@ -65,28 +64,6 @@ class Players:
                 except IndexError:
                     pass
 
-                try:
-                    understat_id = FplToUnderstat.MAPPING[fpl_id]["understat"]
-                except KeyError:
-                    # no data available in df_season
-                    understat_id = float("Nan")
-                if pd.isna(understat_id) == True or understat_id == "N/A":
-                    xg = "N/A"
-                    xa = "N/A"
-                    sum_xg_xa = 0
-                else:
-                    understat = Understat(session)
-                    player_grouped_stats = await understat.get_player_grouped_stats(
-                        understat_id
-                    )
-                    if len(player_grouped_stats["season"]) > 0 and player_grouped_stats["season"][0]["season"] == Gameweek.SEASON:
-                        xg = round(float(player_grouped_stats["season"][0]["xG"]), 2)
-                        xa = round(float(player_grouped_stats["season"][0]["xA"]), 2)
-                        sum_xg_xa = xg + xa
-                    else:
-                        xg = "N/A"
-                        xa = "N/A"
-                        sum_xg_xa = 0
 
                 history = player.history
                 rounds = [i["round"] for i in history]
@@ -140,10 +117,9 @@ class Players:
                     "pos": pos,
                     "latest_price": f"£{latest_price}",
                     "price_change": f"£{price_change}",
-                    "understat_id": understat_id,
-                    "xg": xg,
-                    "xa": xa,
-                    "sum_xg_xa": sum_xg_xa,
+                    "xg": player.expected_goals,
+                    "xa": player.expected_goals,
+                    "sum_xg_xa": player.expected_goals + player.expected_assists,
                     "pts_prev_n_gw": pts_prev_n_gw,
                     "total_pts_prev_n_gw": total_pts_prev_n_gw,
                     "ep_this": float(player.ep_this),

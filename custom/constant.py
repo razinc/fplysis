@@ -3,7 +3,6 @@ import asyncio
 import aiohttp
 import pandas as pd
 from fpl import FPL
-from understat import Understat
 
 OVERALL_LEAGUE_ID = 314
 
@@ -39,42 +38,8 @@ class Gameweek:
         set_attr()
     ).values()
     NEXT_GW = CURRENT_GW + 1
-    SEASON = "2022"
 
 
-class FplToUnderstat:
-    def set_attr():
-        df_understat = pd.read_csv(
-            "https://raw.githubusercontent.com/ChrisMusson/FPL-ID-Map/main/Understat.csv"
-        )
-        df_season = pd.read_csv(
-            "https://raw.githubusercontent.com/ChrisMusson/FPL-ID-Map/main/FPL/22-23.csv"
-        )
-        MAPPING = {}
-        for row in df_understat.values:
-            code, first_name, second_name, web_name, understat = row
-            try:
-                understat = int(understat)
-            except ValueError:
-                # player doesn't has understat id
-                pass
-            try:
-                srs_season_code = df_season["code"]
-                player_index = srs_season_code[srs_season_code == code].index[0]
-                player_id = df_season["22-23"].iloc[player_index]
-            except IndexError:
-                # player is available in df_understat but not in df_season. player is already retired.
-                continue
-            MAPPING[player_id] = {
-                "code": code,
-                "first_name": first_name,
-                "second_name": second_name,
-                "web_name": web_name,
-                "understat": understat,
-            }
-        return MAPPING
-
-    MAPPING = set_attr()
 
     # async def get_player_grouped_stats(understat_id):
     #     async with aiohttp.ClientSession() as session:
