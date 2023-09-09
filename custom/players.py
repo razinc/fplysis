@@ -118,7 +118,8 @@ class Players:
                     "price_change": f"£{price_change}",
                     "xg": player.expected_goals,
                     "xa": player.expected_assists,
-                    "sum_xg_xa": float(player.expected_goals) + float(player.expected_assists),
+                    "sum_xg_xa": float(player.expected_goals)
+                    + float(player.expected_assists),
                     "pts_prev_n_gw": pts_prev_n_gw,
                     "total_pts_prev_n_gw": total_pts_prev_n_gw,
                     "ep_this": float(player.ep_this),
