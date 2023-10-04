@@ -10,7 +10,7 @@ from prettytable import PrettyTable
 from tqdm import tqdm
 
 from custom.constant import Gameweek
-
+from custom.teams import teams
 
 class Players:
     def __init__(self, fpl_ids=None, skips=[], ownership=None):
@@ -19,121 +19,120 @@ class Players:
         else:
             self.fpl_ids = fpl_ids
         self.skips = skips
-        asyncio.run(self.set_attr(ownership))
+        self.builder(ownership)
 
-    async def set_attr(self, ownership):
+    def builder(self, ownership):
         stats = {}
+        players = asyncio.run(self.get_players())
+        if ownership is not None:
+            desc = "Parsing top ownership players "
+        elif self.fpl_ids is None:
+            desc = "Analysing all players"
+        else:
+            desc = "Analysing user's team"
+        for player in tqdm(players, desc=desc):
+            fpl_id = player["id"]
+
+            # skip players on loan/transfer
+            if player["status"] == "u":
+                continue
+
+            if fpl_id in self.skips:
+                continue
+
+            element_type = player["element_type"]
+            if element_type == 1:
+                pos = "GK"
+            if element_type == 2:
+                pos = "DEF"
+            if element_type == 3:
+                pos = "MID"
+            if element_type == 4:
+                pos = "FOR"
+
+            latest_price = player["now_cost"] / 10
+            try:
+                price_change = round(
+                    latest_price - player["history"][-1]["value"] / 10, 1
+                )
+            # player has not plays yet
+            except IndexError:
+                pass
+
+            history = player["history"]
+            rounds = [i["round"] for i in history]
+            pts_prev_n_gw = {}
+            total_pts_prev_n_gw = 0
+            for gw in Gameweek.PREV_N_GWS:
+                if gw not in rounds:
+                    pts_prev_n_gw[gw] = "Blank GW"
+                    continue
+                else:
+                    pts_prev_n_gw[gw] = 0
+                for i in [i for i, j in enumerate(rounds) if j == gw]:
+                    pts_prev_n_gw[gw] = (
+                        pts_prev_n_gw[gw] + history[i]["total_points"]
+                    )
+                    total_pts_prev_n_gw = (
+                        total_pts_prev_n_gw + history[i]["total_points"]
+                    )
+
+            fixtures = {}
+            fixture_difficulty_sum = 0
+            total_games = 0
+            gameweeks = [i.get("event_name") for i in player["fixtures"]]
+            for gw in Gameweek.NEXT_N_GWS:
+                fixtures[gw] = []
+                if f"Gameweek {gw}" in gameweeks:
+                    indices = [
+                        i for i, x in enumerate(gameweeks) if x == f"Gameweek {gw}"
+                    ]
+                    for i in indices:
+                        if player["fixtures"][i]["is_home"] == True:
+                            team_id = player["fixtures"][i]["team_a"]
+                            where = "H"
+                        else:
+                            team_id = player["fixtures"][i]["team_h"]
+                            where = "A"
+                        difficulty = player["fixtures"][i]["difficulty"]
+                        fixture_difficulty_sum = fixture_difficulty_sum + difficulty
+                        total_games = total_games + 1
+                        team_against_short_name = teams[team_id]["short_name"]
+                        fixtures[gw].append(
+                            f"{team_against_short_name} ({where}) ({difficulty})"
+                        )
+                else:
+                    fixtures[gw] = ["Blank GW"]
+
+            stats[fpl_id] = {
+                "web_name": player["web_name"],
+                "team_short_name": teams[player["team"]]["short_name"],
+                "pos": pos,
+                "latest_price": f"£{latest_price}",
+                "price_change": f"£{price_change}",
+                "xg": player["expected_goals"],
+                "xa": player["expected_assists"],
+                "sum_xg_xa": float(player["expected_goals"])
+                + float(player["expected_assists"]),
+                "pts_prev_n_gw": pts_prev_n_gw,
+                "total_pts_prev_n_gw": total_pts_prev_n_gw,
+                "ep_this": float(player["ep_this"]),
+                "ep_next": float(player["ep_next"]),
+                "fixtures": fixtures,
+                "fixture_difficulty_avg": round(
+                    fixture_difficulty_sum / total_games, 1
+                ),
+            }
+
+            if ownership is not None:
+                stats[fpl_id]["ownership"] = f"{ownership[fpl_id]}%"
+            self.stats = stats
+
+    async def get_players(self):
         async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
-            players = await fpl.get_players(self.fpl_ids, include_summary=True)
-            if ownership is not None:
-                desc = "Parsing top ownership players "
-            elif self.fpl_ids is None:
-                desc = "Analysing all players"
-            else:
-                desc = "Analysing user's team"
-            for player in tqdm(players, desc=desc):
-                fpl_id = player.id
-
-                # skip players on loan/ transfer
-                if player.status == "u":
-                    continue
-
-                if fpl_id in self.skips:
-                    continue
-
-                team = await fpl.get_team(player.team)
-                team_short_name = team.short_name
-
-                element_type = player.element_type
-                if element_type == 1:
-                    pos = "GK"
-                if element_type == 2:
-                    pos = "DEF"
-                if element_type == 3:
-                    pos = "MID"
-                if element_type == 4:
-                    pos = "FOR"
-
-                latest_price = player.now_cost / 10
-                try:
-                    price_change = round(
-                        latest_price - player.history[-1]["value"] / 10, 1
-                    )
-                # player has not plays yet
-                except IndexError:
-                    pass
-
-                history = player.history
-                rounds = [i["round"] for i in history]
-                pts_prev_n_gw = {}
-                total_pts_prev_n_gw = 0
-                for gw in Gameweek.PREV_N_GWS:
-                    if gw not in rounds:
-                        pts_prev_n_gw[gw] = "Blank GW"
-                        continue
-                    else:
-                        pts_prev_n_gw[gw] = 0
-                    for i in [i for i, j in enumerate(rounds) if j == gw]:
-                        pts_prev_n_gw[gw] = (
-                            pts_prev_n_gw[gw] + history[i]["total_points"]
-                        )
-                        total_pts_prev_n_gw = (
-                            total_pts_prev_n_gw + history[i]["total_points"]
-                        )
-
-                fixtures = {}
-                fixture_difficulty_sum = 0
-                total_games = 0
-                gameweeks = [i.get("event_name") for i in player.fixtures]
-                for gw in Gameweek.NEXT_N_GWS:
-                    fixtures[gw] = []
-                    if f"Gameweek {gw}" in gameweeks:
-                        indices = [
-                            i for i, x in enumerate(gameweeks) if x == f"Gameweek {gw}"
-                        ]
-                        for i in indices:
-                            if player.fixtures[i]["is_home"] == True:
-                                team_code = player.fixtures[i]["team_a"]
-                                where = "H"
-                            else:
-                                team_code = player.fixtures[i]["team_h"]
-                                where = "A"
-                            difficulty = player.fixtures[i]["difficulty"]
-                            fixture_difficulty_sum = fixture_difficulty_sum + difficulty
-                            total_games = total_games + 1
-                            team_against = await fpl.get_team(team_code)
-                            team_against_short_name = team_against.short_name
-                            fixtures[gw].append(
-                                f"{team_against_short_name} ({where}) ({difficulty})"
-                            )
-                    else:
-                        fixtures[gw] = ["Blank GW"]
-
-                stats[fpl_id] = {
-                    "web_name": player.web_name,
-                    "team_short_name": team_short_name,
-                    "pos": pos,
-                    "latest_price": f"£{latest_price}",
-                    "price_change": f"£{price_change}",
-                    "xg": player.expected_goals,
-                    "xa": player.expected_assists,
-                    "sum_xg_xa": float(player.expected_goals)
-                    + float(player.expected_assists),
-                    "pts_prev_n_gw": pts_prev_n_gw,
-                    "total_pts_prev_n_gw": total_pts_prev_n_gw,
-                    "ep_this": float(player.ep_this),
-                    "ep_next": float(player.ep_next),
-                    "fixtures": fixtures,
-                    "fixture_difficulty_avg": round(
-                        fixture_difficulty_sum / total_games, 1
-                    ),
-                }
-
-                if ownership is not None:
-                    stats[fpl_id]["ownership"] = f"{ownership[fpl_id]}%"
-
-            self.stats = stats
+            players = await fpl.get_players(self.fpl_ids, return_json = True, include_summary=True)
+        return players
 
     def sort_by_total_pts_prev_n_gw(self):
         self.stats = OrderedDict(
