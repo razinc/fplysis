@@ -4,7 +4,6 @@ from itertools import islice
 from operator import getitem
 
 import aiohttp
-import pandas as pd
 from fpl import FPL
 from prettytable import PrettyTable
 from tqdm import tqdm

@@ -1,7 +1,6 @@
 import asyncio
 
 import aiohttp
-import pandas as pd
 from fpl import FPL
 
 OVERALL_LEAGUE_ID = 314
