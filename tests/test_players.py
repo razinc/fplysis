@@ -1,8 +1,7 @@
 import pytest
 
-from custom.players import Players
 from custom.constant import Gameweek
-
+from custom.players import Players
 from custom.teams import teams
 
 

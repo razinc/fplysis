@@ -1,7 +1,6 @@
 import pytest
 
-from custom.teams import get_teams
-from custom.teams import builder
+from custom.teams import builder, get_teams
 
 
 def test_teams(monkeypatch):
