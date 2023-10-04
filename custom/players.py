@@ -12,6 +12,7 @@ from tqdm import tqdm
 from custom.constant import Gameweek
 from custom.teams import teams
 
+
 class Players:
     def __init__(self, fpl_ids=None, skips=[], ownership=None):
         if ownership is not None:
@@ -70,9 +71,7 @@ class Players:
                 else:
                     pts_prev_n_gw[gw] = 0
                 for i in [i for i, j in enumerate(rounds) if j == gw]:
-                    pts_prev_n_gw[gw] = (
-                        pts_prev_n_gw[gw] + history[i]["total_points"]
-                    )
+                    pts_prev_n_gw[gw] = pts_prev_n_gw[gw] + history[i]["total_points"]
                     total_pts_prev_n_gw = (
                         total_pts_prev_n_gw + history[i]["total_points"]
                     )
@@ -131,7 +130,9 @@ class Players:
     async def get_players(self):
         async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
-            players = await fpl.get_players(self.fpl_ids, return_json = True, include_summary=True)
+            players = await fpl.get_players(
+                self.fpl_ids, return_json=True, include_summary=True
+            )
         return players
 
     def sort_by_total_pts_prev_n_gw(self):
