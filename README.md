@@ -46,11 +46,11 @@ poetry shell
 ```
 Or you can use `poetry run` before any script:
 ```bash
-poetry run analysis_top_10k.py
+poetry run python analysis_top_10k.py
 ```
 Each of available scripts have a simple guide on how to use them by adding `-h` switch.
 ```bash
-poetry run analysis_team.py -h
+poetry run python analysis_team.py -h
 ```
 
 # Sample Output
