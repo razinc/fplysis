@@ -13,24 +13,19 @@ from custom.teams import teams
 
 
 class Players:
-    def __init__(self, fpl_ids=None, skips=[], ownership=None):
+    def __init__(self, fpl_ids=None, skips=[], ownership=None, tqdm_desc = None):
         if ownership is not None:
             self.fpl_ids = ownership.keys()
         else:
             self.fpl_ids = fpl_ids
         self.skips = skips
-        self.builder(ownership)
+        self.builder(ownership, tqdm_desc)
 
-    def builder(self, ownership):
+    def builder(self, ownership, tqdm_desc):
         stats = {}
         players = asyncio.run(self.get_players())
-        if ownership is not None:
-            desc = "Parsing top ownership players "
-        elif self.fpl_ids is None:
-            desc = "Analysing all players"
-        else:
-            desc = "Analysing user's team"
-        for player in tqdm(players, desc=desc):
+
+        for player in tqdm(players, desc=tqdm_desc):
             fpl_id = player["id"]
 
             # skip players on loan/transfer

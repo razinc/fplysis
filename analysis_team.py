@@ -14,13 +14,13 @@ with open("output/analysis_team.txt", "w") as f:
     f.write(f"Current GW     : {Gameweek.CURRENT_GW}\n")
     f.write(f"Money Remaining: {user.in_the_bank}\n\n")
 
-    user_players = Players(fpl_ids=user.team)
+    user_players = Players(fpl_ids=user.team, tqdm_desc = "Analysing user's team")
 
     user_players.sort_by_total_pts_prev_n_gw()
     f.write("Performance:\n")
     f.write(user_players.get_table())
 
-    not_user_players = Players(skips=user.team)
+    not_user_players = Players(skips=user.team, tqdm_desc = "Analysing all players")
 
     not_user_players.sort_by_total_pts_prev_n_gw()
     f.write("\n\nWatchlist (Performance):\n")
