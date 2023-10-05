@@ -441,13 +441,13 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "fpl"
-version = "0.6.34"
+version = "0.6.35"
 description = "A Python wrapper for the Fantasy Premier League API"
 optional = false
 python-versions = "*"
 files = [
-    {file = "fpl-0.6.34-py2.py3-none-any.whl", hash = "sha256:34684c5713ffbfa571931999d7d3fed12ec59a63073fb1daba2f486b15ceaf9b"},
-    {file = "fpl-0.6.34.tar.gz", hash = "sha256:0e92f89bfd6b98b085dcd8142cbb748fa41cb84303fa26689d9715be90639553"},
+    {file = "fpl-0.6.35-py2.py3-none-any.whl", hash = "sha256:190b558f57f46883d99549ea6e5d10a62e4ddf4a72ab1694a557f52e565d59e2"},
+    {file = "fpl-0.6.35.tar.gz", hash = "sha256:174a6ba7fa0cd17e4eecfb704b0779a4c5eceabb44b3243d87ac7a0113433009"},
 ]
 
 [package.dependencies]
@@ -992,4 +992,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "240f48049d7a8c7d4a1d869c8c5683907cdcaf1ecdc616c66dd0d680e40b1812"
+content-hash = "298c6d1b1daa804eb6b535c0da7e7ee9de15b6d5c52ee2e9454471f870b117ea"
