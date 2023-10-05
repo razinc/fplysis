@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "fpl-analysis"
+name = "fplysis"
 version = "0.1.0"
 description = "pick better players in fpl"
 authors = ["razinc <l_noir@yahoo.com>"]
