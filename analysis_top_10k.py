@@ -13,5 +13,7 @@ with open("output/analysis_top_10k.txt", "w") as f:
     f.write(f"Current GW     : {Gameweek.CURRENT_GW}\n\n")
 
     asyncio.run(league.get_top_10k_ownership())
-    top_10k_players = Players(ownership=league.top_10k_ownership, tqdm_desc = "Parsing top ownership players ")
+    top_10k_players = Players(
+        ownership=league.top_10k_ownership, tqdm_desc="Parsing top ownership players "
+    )
     f.write(top_10k_players.get_table())

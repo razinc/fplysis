@@ -13,7 +13,7 @@ from custom.teams import teams
 
 
 class Players:
-    def __init__(self, fpl_ids=None, skips=[], ownership=None, tqdm_desc = None):
+    def __init__(self, fpl_ids=None, skips=[], ownership=None, tqdm_desc=None):
         if ownership is not None:
             self.fpl_ids = ownership.keys()
         else:
