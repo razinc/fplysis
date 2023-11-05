@@ -20,7 +20,9 @@ class League:
         async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
             await fpl.login(
-                email=fpl_credentials.EMAIL, password=fpl_credentials.PASSWORD, cookie=fpl_credentials.COOKIE
+                email=fpl_credentials.EMAIL,
+                password=fpl_credentials.PASSWORD,
+                cookie=fpl_credentials.COOKIE,
             )
             league = await fpl.get_classic_league(self.league_id)
             self.name = league.league["name"]
