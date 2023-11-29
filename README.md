@@ -35,6 +35,7 @@ All credentials are stored in `fpl_credentials.py` using below format. This is r
 ```python
 EMAIL = ""
 PASSWORD = ""
+COOKIE = """datadome=;pl_profile="""
 ```
 
 You can view sample outputs of each script in section below.
