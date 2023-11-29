@@ -18,6 +18,14 @@ async def get_fdr():
 
 def builder():
     fdr = asyncio.run(get_fdr())
+
+    # temporary workaround to fix wrong team mapping
+    try:
+        fdr["Sheffield Utd"] = fdr["Southampton"]
+        del fdr["Southampton"]
+    except KeyError:
+        pass
+
     teams = {}
     for team in asyncio.run(get_teams()):
         teams[team["id"]] = {"short_name": team["short_name"],
