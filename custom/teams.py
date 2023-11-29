@@ -10,11 +10,13 @@ async def get_teams():
         teams = await fpl.get_teams(return_json=True)
     return teams
 
+
 async def get_fdr():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
         fdr = await fpl.FDR()
     return fdr
+
 
 def builder():
     fdr = asyncio.run(get_fdr())
@@ -28,9 +30,11 @@ def builder():
 
     teams = {}
     for team in asyncio.run(get_teams()):
-        teams[team["id"]] = {"short_name": team["short_name"],
-                             "FDR_H": round(fdr[team["name"]]["all"]["H"], 2), 
-                             "FDR_A": round(fdr[team["name"]]["all"]["A"], 2)}
+        teams[team["id"]] = {
+            "short_name": team["short_name"],
+            "FDR_H": round(fdr[team["name"]]["all"]["H"], 2),
+            "FDR_A": round(fdr[team["name"]]["all"]["A"], 2),
+        }
     return teams
 
 

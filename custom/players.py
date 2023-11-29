@@ -88,7 +88,7 @@ class Players:
                             team_id = player["fixtures"][i]["team_h"]
                             where = "A"
                         fdr = teams[team_id][f"FDR_{where}"]
-                        fdr_sum = fdr_sum + fdr 
+                        fdr_sum = fdr_sum + fdr
                         total_games = total_games + 1
                         team_against_short_name = teams[team_id]["short_name"]
                         fixtures[gw].append(
@@ -112,9 +112,7 @@ class Players:
                 "ep_this": float(player["ep_this"]),
                 "ep_next": float(player["ep_next"]),
                 "fixtures": fixtures,
-                "fdr_avg": round(
-                    fdr_sum / total_games, 1
-                ),
+                "fdr_avg": round(fdr_sum / total_games, 1),
             }
 
             if ownership is not None:
@@ -140,9 +138,7 @@ class Players:
 
     def sort_by_fda(self):
         self.sort_by_total_pts_prev_n_gw()
-        self.stats = {
-            k: v for k, v in self.stats.items() if v["fdr_avg"] < 2.4
-        }
+        self.stats = {k: v for k, v in self.stats.items() if v["fdr_avg"] < 2.4}
 
     def sort_by_sum_xg_xa(self):
         self.stats = OrderedDict(
