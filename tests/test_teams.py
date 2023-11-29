@@ -57,9 +57,15 @@ def test_teams(monkeypatch):
     monkeypatch.setattr("custom.teams.get_teams", mock_get_teams)
 
     async def mock_get_fdr():
-        return {"Arsenal": {"all": {"H": 4.380170195923214, "A": 4.18487113008998}}, "Aston Villa": {"all": {"H": 2.10799358574808, "A": 5.0}}}
+        return {
+            "Arsenal": {"all": {"H": 4.380170195923214, "A": 4.18487113008998}},
+            "Aston Villa": {"all": {"H": 2.10799358574808, "A": 5.0}},
+        }
 
     monkeypatch.setattr("custom.teams.get_fdr", mock_get_fdr)
 
     teams = builder()
-    assert teams == {1: {"short_name": "ARS", "FDR_H": 4.38, "FDR_A": 4.18}, 2: {"short_name": "AVL", "FDR_H": 2.11, "FDR_A": 5.0}}
+    assert teams == {
+        1: {"short_name": "ARS", "FDR_H": 4.38, "FDR_A": 4.18},
+        2: {"short_name": "AVL", "FDR_H": 2.11, "FDR_A": 5.0},
+    }
