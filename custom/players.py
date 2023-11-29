@@ -71,7 +71,7 @@ class Players:
                     )
 
             fixtures = {}
-            fixture_difficulty_sum = 0
+            fdr_sum = 0
             total_games = 0
             gameweeks = [i.get("event_name") for i in player["fixtures"]]
             for gw in Gameweek.NEXT_N_GWS:
@@ -87,12 +87,12 @@ class Players:
                         else:
                             team_id = player["fixtures"][i]["team_h"]
                             where = "A"
-                        difficulty = player["fixtures"][i]["difficulty"]
-                        fixture_difficulty_sum = fixture_difficulty_sum + difficulty
+                        fdr = teams[team_id][f"FDR_{where}"]
+                        fdr_sum = fdr_sum + fdr 
                         total_games = total_games + 1
                         team_against_short_name = teams[team_id]["short_name"]
                         fixtures[gw].append(
-                            f"{team_against_short_name} ({where}) ({difficulty})"
+                            f"{team_against_short_name} ({where}) ({fdr})"
                         )
                 else:
                     fixtures[gw] = ["Blank GW"]
@@ -112,8 +112,8 @@ class Players:
                 "ep_this": float(player["ep_this"]),
                 "ep_next": float(player["ep_next"]),
                 "fixtures": fixtures,
-                "fixture_difficulty_avg": round(
-                    fixture_difficulty_sum / total_games, 1
+                "fdr_avg": round(
+                    fdr_sum / total_games, 1
                 ),
             }
 
@@ -141,7 +141,7 @@ class Players:
     def sort_by_fda(self):
         self.sort_by_total_pts_prev_n_gw()
         self.stats = {
-            k: v for k, v in self.stats.items() if v["fixture_difficulty_avg"] < 2.4
+            k: v for k, v in self.stats.items() if v["fdr_avg"] < 2.4
         }
 
     def sort_by_sum_xg_xa(self):
@@ -190,7 +190,7 @@ class Players:
             fixtures = v["fixtures"]
             for fixture in list(v["fixtures"].values()):
                 row.append("\n".join(fixture))
-            row.append(v["fixture_difficulty_avg"])
+            row.append(v["fdr_avg"])
             if "ownership" in list(dict(islice(self.stats.items(), 1)).values())[0]:
                 row.append(v["ownership"])
             table.add_row(row)

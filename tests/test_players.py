@@ -8,9 +8,10 @@ from custom.teams import teams
 def test_init_with_mock(monkeypatch):
     monkeypatch.setattr(Gameweek, "PREV_N_GWS", [5, 6])
     monkeypatch.setattr(Gameweek, "NEXT_N_GWS", [8, 9])
-    monkeypatch.setitem(
-        teams, 7, {"short_name": "CHE"}
-    )  # TODO: this works but only patch certain key value pair in the dict, patch the whole var?
+    # TODO: this works but only patch certain key value pair in the dict, patch the whole var?
+    monkeypatch.setitem(teams, 1, {'short_name': 'ARS', 'FDR_H': 4.38, 'FDR_A': 4.18})
+    monkeypatch.setitem(teams, 6, {'short_name': 'BUR', 'FDR_H': 1.77, 'FDR_A': 1.0})
+    monkeypatch.setitem(teams, 7, {'short_name': 'CHE', 'FDR_H': 3.68, 'FDR_A': 2.42})
 
     async def mock_get_players(self):
         return [
@@ -32,14 +33,12 @@ def test_init_with_mock(monkeypatch):
                         "team_a": 7,
                         "event_name": "Gameweek 8",
                         "is_home": False,
-                        "difficulty": 2,
                     },
                     {
                         "team_h": 7,
                         "team_a": 1,
                         "event_name": "Gameweek 9",
                         "is_home": True,
-                        "difficulty": 4,
                     },
                 ],
                 "history": [
@@ -75,6 +74,7 @@ def test_init_with_mock(monkeypatch):
     monkeypatch.setattr(Players, "get_players", mock_get_players)
 
     players = Players(fpl_ids=[202])
+
     assert players.stats == {
         202: {
             "web_name": "Gallagher",
@@ -89,7 +89,7 @@ def test_init_with_mock(monkeypatch):
             "total_pts_prev_n_gw": 5,
             "ep_this": 2.7,
             "ep_next": 3.2,
-            "fixtures": {8: ["BUR (A) (2)"], 9: ["ARS (H) (4)"]},
-            "fixture_difficulty_avg": 3.0,
+            "fixtures": {8: ["BUR (A) (1.0)"], 9: ["ARS (H) (4.38)"]},
+            "fdr_avg": 2.7,
         }
     }
