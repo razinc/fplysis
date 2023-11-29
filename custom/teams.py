@@ -4,20 +4,6 @@ import aiohttp
 from fpl import FPL
 
 
-async def get_teams():
-    async with aiohttp.ClientSession() as session:
-        fpl = FPL(session)
-        teams = await fpl.get_teams(return_json=True)
-    return teams
-
-
-async def get_fdr():
-    async with aiohttp.ClientSession() as session:
-        fpl = FPL(session)
-        fdr = await fpl.FDR()
-    return fdr
-
-
 def builder():
     fdr = asyncio.run(get_fdr())
 
@@ -37,5 +23,18 @@ def builder():
         }
     return teams
 
+
+async def get_fdr():
+    async with aiohttp.ClientSession() as session:
+        fpl = FPL(session)
+        fdr = await fpl.FDR()
+    return fdr
+
+
+async def get_teams():
+    async with aiohttp.ClientSession() as session:
+        fpl = FPL(session)
+        teams = await fpl.get_teams(return_json=True)
+    return teams
 
 teams = builder()
