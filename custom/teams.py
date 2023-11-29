@@ -37,4 +37,5 @@ async def get_teams():
         teams = await fpl.get_teams(return_json=True)
     return teams
 
+
 teams = builder()
