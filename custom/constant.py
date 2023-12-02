@@ -12,7 +12,7 @@ class Gameweek:
             fpl = FPL(session)
             gameweeks = await fpl.get_gameweeks()
             for gameweek in gameweeks:
-                if gameweek.finished == True or gameweek.is_current == True:
+                if gameweek.finished or gameweek.is_current:
                     current_gw = gameweek.id
                 no_of_prev_gws = 3
                 prev_n_gws = [

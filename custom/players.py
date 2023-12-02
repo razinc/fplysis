@@ -81,7 +81,7 @@ class Players:
                         i for i, x in enumerate(gameweeks) if x == f"Gameweek {gw}"
                     ]
                     for i in indices:
-                        if player["fixtures"][i]["is_home"] == True:
+                        if player["fixtures"][i]["is_home"]:
                             team_id = player["fixtures"][i]["team_a"]
                             where = "H"
                         else:
