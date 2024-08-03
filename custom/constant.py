@@ -14,6 +14,8 @@ class Gameweek:
             for gameweek in gameweeks:
                 if gameweek.finished or gameweek.is_current:
                     current_gw = gameweek.id
+                elif gameweek.id == 1 and not gameweek.finished:
+                    current_gw = 0
                 no_of_prev_gws = 3
                 prev_n_gws = [
                     i

@@ -46,13 +46,17 @@ class Players:
                 pos = "FOR"
 
             latest_price = player["now_cost"] / 10
-            try:
-                price_change = round(
-                    latest_price - player["history"][-1]["value"] / 10, 1
-                )
-            # player has not plays yet
-            except IndexError:
-                pass
+
+            if Gameweek.CURRENT_GW == 0:
+                price_change = 0
+            else:
+                try:
+                    price_change = round(
+                        latest_price - player["history"][-1]["value"] / 10, 1
+                    )
+                # player has not plays yet
+                except IndexError:
+                    pass
 
             history = player["history"]
             rounds = [i["round"] for i in history]
@@ -69,6 +73,11 @@ class Players:
                     total_pts_prev_n_gw = (
                         total_pts_prev_n_gw + history[i]["total_points"]
                     )
+
+            if Gameweek.CURRENT_GW == 0:
+                ep_this = 0
+            else:
+                ep_this = float(player["ep_this"]),
 
             fixtures = {}
             fdr_sum = 0
@@ -109,7 +118,7 @@ class Players:
                 + float(player["expected_assists"]),
                 "pts_prev_n_gw": pts_prev_n_gw,
                 "total_pts_prev_n_gw": total_pts_prev_n_gw,
-                "ep_this": float(player["ep_this"]),
+                "ep_this": ep_this,
                 "ep_next": float(player["ep_next"]),
                 "fixtures": fixtures,
                 "fdr_avg": round(fdr_sum / total_games, 1),
