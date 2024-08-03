@@ -147,7 +147,7 @@ class Players:
 
     def sort_by_fda(self):
         self.sort_by_total_pts_prev_n_gw()
-        self.stats = {k: v for k, v in self.stats.items() if v["fdr_avg"] < 2.4}
+        self.stats = {k: v for k, v in self.stats.items() if v["fdr_avg"] <= 2.8}
 
     def sort_by_sum_xg_xa(self):
         self.stats = OrderedDict(
