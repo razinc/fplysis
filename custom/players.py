@@ -28,9 +28,17 @@ class Players:
         for player in tqdm(players, desc=tqdm_desc):
             fpl_id = player["id"]
 
+            if player["status"] == " d":
+                status = "(Doubtful)"
+            if player["status"] == "i":
+                status = "(Injured)"
+            if player["status"] == "s":
+                status = "(Suspended)"
             # skip players on loan/transfer
             if player["status"] == "u":
                 continue
+            else:
+                status = ""
 
             if fpl_id in self.skips:
                 continue
@@ -108,6 +116,7 @@ class Players:
 
             stats[fpl_id] = {
                 "web_name": player["web_name"],
+                "status": status,
                 "team_short_name": teams[player["team"]]["short_name"],
                 "pos": pos,
                 "latest_price": f"£{latest_price}",
@@ -182,7 +191,7 @@ class Players:
         for k, v in dict(islice(self.stats.items(), top)).items():
             row = (
                 [
-                    v["web_name"],
+                    f'{v["web_name"]} {v["status"]}',
                     v["team_short_name"],
                     v["pos"],
                     v["latest_price"],
