@@ -7,13 +7,6 @@ from fpl import FPL
 def builder():
     fdr = asyncio.run(get_fdr())
 
-    # temporary workaround to fix wrong team mapping
-    try:
-        fdr["Sheffield Utd"] = fdr["Southampton"]
-        del fdr["Southampton"]
-    except KeyError:
-        pass
-
     teams = {}
     for team in asyncio.run(get_teams()):
         if len(fdr) == 0:
