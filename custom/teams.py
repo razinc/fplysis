@@ -13,8 +13,8 @@ def builder():
             fdr_h = team["strength"]
             fdr_a = fdr_h # only 1 value is provided in the api
         else:
-            fdr_h = round(fdr[team["name"]]["all"]["H"], 2),
-            fdr_a = round(fdr[team["name"]]["all"]["A"], 2),
+            fdr_h = round(fdr[team["name"]]["all"]["H"], 2)
+            fdr_a = round(fdr[team["name"]]["all"]["A"], 2)
 
         teams[team["id"]] = {
             "short_name": team["short_name"],
