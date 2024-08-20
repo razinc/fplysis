@@ -16,7 +16,9 @@ class User:
         self.team_name = user["name"]
         if self.log_in:
             self.team = [i["element"] for i in asyncio.run(self.get_team())]
-            self.in_the_bank = f'£{asyncio.run(self.get_transfers_status())["bank"] / 10}'
+            self.in_the_bank = (
+                f'£{asyncio.run(self.get_transfers_status())["bank"] / 10}'
+            )
         else:
             picks = asyncio.run(self.get_picks())
             self.team = [i["element"] for i in picks[list(picks.keys())[-1]]]
@@ -27,12 +29,13 @@ class User:
             fpl = FPL(session)
             if self.log_in:
                 import fpl_credentials
+
                 await fpl.login(
-                    email = fpl_credentials.EMAIL,
-                    password = fpl_credentials.PASSWORD,
-                    cookie = fpl_credentials.COOKIE,
+                    email=fpl_credentials.EMAIL,
+                    password=fpl_credentials.PASSWORD,
+                    cookie=fpl_credentials.COOKIE,
                 )
-                user = await fpl.get_user(return_json = True)
+                user = await fpl.get_user(return_json=True)
             else:
                 user = await fpl.get_user(self.user_id, return_json=True)
         return user
@@ -46,12 +49,13 @@ class User:
 
     async def get_team(self):
         import fpl_credentials
+
         async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
             await fpl.login(
-                email = fpl_credentials.EMAIL,
-                password = fpl_credentials.PASSWORD,
-                cookie = fpl_credentials.COOKIE,
+                email=fpl_credentials.EMAIL,
+                password=fpl_credentials.PASSWORD,
+                cookie=fpl_credentials.COOKIE,
             )
             user = await fpl.get_user()
             team = await user.get_team()
@@ -59,12 +63,13 @@ class User:
 
     async def get_transfers_status(self):
         import fpl_credentials
+
         async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
             await fpl.login(
-                email = fpl_credentials.EMAIL,
-                password = fpl_credentials.PASSWORD,
-                cookie = fpl_credentials.COOKIE,
+                email=fpl_credentials.EMAIL,
+                password=fpl_credentials.PASSWORD,
+                cookie=fpl_credentials.COOKIE,
             )
             user = await fpl.get_user()
             transfer_status = await user.get_transfers_status()

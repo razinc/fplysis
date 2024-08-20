@@ -139,7 +139,14 @@ class Players:
             perf_weightage = 0.2
             fda_weightage = 0.15
             price_weightage = 0.1
-            stats[fpl_id]["weighted_value"] = round((stats[fpl_id]["xg"] * xg_weightage) + (stats[fpl_id]["xa"] * xa_weightage) + (stats[fpl_id]["total_pts_prev_n_gw"] * perf_weightage) + (1 / stats[fpl_id]["fdr_avg"] * fda_weightage) + (1 / stats[fpl_id]["latest_price"] * price_weightage), 1)
+            stats[fpl_id]["weighted_value"] = round(
+                (stats[fpl_id]["xg"] * xg_weightage)
+                + (stats[fpl_id]["xa"] * xa_weightage)
+                + (stats[fpl_id]["total_pts_prev_n_gw"] * perf_weightage)
+                + (1 / stats[fpl_id]["fdr_avg"] * fda_weightage)
+                + (1 / stats[fpl_id]["latest_price"] * price_weightage),
+                1,
+            )
 
             if ownership is not None:
                 stats[fpl_id]["ownership"] = f"{ownership[fpl_id]}%"
