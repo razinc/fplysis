@@ -85,7 +85,7 @@ class Players:
             if Gameweek.CURRENT_GW == 0:
                 ep_this = 0
             else:
-                ep_this = float(player["ep_this"]),
+                ep_this = float(player["ep_this"])
 
             fixtures = {}
             fdr_sum = 0

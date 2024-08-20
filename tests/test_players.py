@@ -78,12 +78,13 @@ def test_init_with_mock(monkeypatch):
     assert players.stats == {
         202: {
             "web_name": "Gallagher",
+            "status": "",
             "team_short_name": "CHE",
             "pos": "MID",
-            "latest_price": "£5.4",
-            "price_change": "£0.0",
-            "xg": "0.52",
-            "xa": "0.76",
+            "latest_price": 5.4,
+            "price_change": 0.0,
+            "xg": 0.52,
+            "xa": 0.76,
             "sum_xg_xa": 1.28,
             "pts_prev_n_gw": {5: 3, 6: 2},
             "total_pts_prev_n_gw": 5,
@@ -91,5 +92,6 @@ def test_init_with_mock(monkeypatch):
             "ep_next": 3.2,
             "fixtures": {8: ["BUR (A) (1.0)"], 9: ["ARS (H) (4.38)"]},
             "fdr_avg": 2.7,
+            "weighted_value": 1.4,
         }
     }
