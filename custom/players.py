@@ -82,10 +82,15 @@ class Players:
                         total_pts_prev_n_gw + history[i]["total_points"]
                     )
 
-            if Gameweek.CURRENT_GW == 0:
+            if Gameweek.CURRENT_GW == 0 or player["ep_this"] == None:
                 ep_this = 0
             else:
                 ep_this = float(player["ep_this"])
+
+            if player["ep_next"] == None:
+                ep_next = 0
+            else:
+                ep_next = float(player["ep_next"])
 
             fixtures = {}
             fdr_sum = 0
@@ -128,7 +133,7 @@ class Players:
                 "pts_prev_n_gw": pts_prev_n_gw,
                 "total_pts_prev_n_gw": total_pts_prev_n_gw,
                 "ep_this": ep_this,
-                "ep_next": float(player["ep_next"]),
+                "ep_next": ep_next,
                 "fixtures": fixtures,
                 "fdr_avg": round(fdr_sum / total_games, 1),
             }
