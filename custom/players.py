@@ -147,8 +147,12 @@ class Players:
             fda_weightage = 0.25
             price_weightage = 0.05
             stats[fpl_id]["weighted_value"] = round(
-                + (stats[fpl_id]["xgi"] * xgi_weightage)
-                + (stats[fpl_id]["total_pts_prev_n_gw"] / Gameweek.NO_OF_PREV_GWS * perf_weightage)
+                +(stats[fpl_id]["xgi"] * xgi_weightage)
+                + (
+                    stats[fpl_id]["total_pts_prev_n_gw"]
+                    / Gameweek.NO_OF_PREV_GWS
+                    * perf_weightage
+                )
                 + (1 / stats[fpl_id]["fdr_avg"] * fda_weightage)
                 + (1 / stats[fpl_id]["latest_price"] * price_weightage),
                 1,
