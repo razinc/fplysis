@@ -66,6 +66,10 @@ class Players:
                 except IndexError:
                     pass
 
+            xg = float(player["expected_goals"])
+            xa = float(player["expected_assists"])
+            xgi = round(xg + xa, 2)
+
             history = player["history"]
             rounds = [i["round"] for i in history]
             pts_prev_n_gw = {}
@@ -126,10 +130,9 @@ class Players:
                 "pos": pos,
                 "latest_price": latest_price,
                 "price_change": price_change,
-                "xg": float(player["expected_goals"]),
-                "xa": float(player["expected_assists"]),
-                "sum_xg_xa": float(player["expected_goals"])
-                + float(player["expected_assists"]),
+                "xg": xg,
+                "xa": xa,
+                "xgi": xgi,
                 "pts_prev_n_gw": pts_prev_n_gw,
                 "total_pts_prev_n_gw": total_pts_prev_n_gw,
                 "ep_this": ep_this,
@@ -178,11 +181,11 @@ class Players:
         self.sort_by_total_pts_prev_n_gw()
         self.stats = {k: v for k, v in self.stats.items() if v["fdr_avg"] <= 2.8}
 
-    def sort_by_sum_xg_xa(self):
+    def sort_by_xgi(self):
         self.stats = OrderedDict(
             sorted(
                 self.stats.items(),
-                key=lambda x: getitem(x[1], "sum_xg_xa"),
+                key=lambda x: getitem(x[1], "xgi"),
                 reverse=True,
             )
         )
@@ -197,7 +200,7 @@ class Players:
     def get_table(self, top=None):
         table = PrettyTable()
         header = (
-            ["Name", "Team", "Pos", "Price", "xG", "xA"]
+            ["Name", "Team", "Pos", "Price", "xGI"]
             + [f"GW{gw} Pts" for gw in Gameweek.PREV_N_GWS]
             + ["Σ Pts"]
             + [f"GW{Gameweek.NEXT_GW} xP"]
@@ -216,8 +219,7 @@ class Players:
                     v["team_short_name"],
                     v["pos"],
                     f'£{v["latest_price"]}',
-                    v["xg"],
-                    v["xa"],
+                    v["xgi"],
                 ]
                 + list(v["pts_prev_n_gw"].values())
                 + [v["total_pts_prev_n_gw"], v["ep_next"]]

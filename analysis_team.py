@@ -34,8 +34,8 @@ with open("output/analysis_team.txt", "w") as f:
         f.write("\n\nWatchlist (Fixture):\n")
         f.write(fda.get_table(top=10))
 
-    not_user_players.sort_by_sum_xg_xa()
-    f.write("\n\nWatchlist (xG + xA):\n")
+    not_user_players.sort_by_xgi()
+    f.write("\n\nWatchlist (xGI):\n")
     f.write(not_user_players.get_table(top=10))
 
     not_user_players.sort_by_xpts()

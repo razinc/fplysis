@@ -85,7 +85,7 @@ def test_init_with_mock(monkeypatch):
             "price_change": 0.0,
             "xg": 0.52,
             "xa": 0.76,
-            "sum_xg_xa": 1.28,
+            "xgi": 1.28,
             "pts_prev_n_gw": {5: 3, 6: 2},
             "total_pts_prev_n_gw": 5,
             "ep_this": 2.7,
