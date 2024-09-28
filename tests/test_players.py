@@ -6,6 +6,7 @@ from custom.teams import teams
 
 
 def test_init_with_mock(monkeypatch):
+    monkeypatch.setattr(Gameweek, "NO_OF_PREV_GWS", 2)
     monkeypatch.setattr(Gameweek, "PREV_N_GWS", [5, 6])
     monkeypatch.setattr(Gameweek, "NEXT_N_GWS", [8, 9])
     # TODO: this works but only patch certain key value pair in the dict, patch the whole var?
@@ -92,6 +93,6 @@ def test_init_with_mock(monkeypatch):
             "ep_next": 3.2,
             "fixtures": {8: ["BUR (A) (1.0)"], 9: ["ARS (H) (4.38)"]},
             "fdr_avg": 2.7,
-            "weighted_value": 1.4,
+            "weighted_value": 1.1,
         }
     }
