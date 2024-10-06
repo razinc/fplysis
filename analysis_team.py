@@ -22,24 +22,8 @@ with open("output/analysis_team.txt", "w") as f:
 
     not_user_players = Players(skips=user.team, tqdm_desc="Analysing all players")
 
-    not_user_players.sort_by_total_pts_prev_n_gw()
-    f.write("\n\nWatchlist (Performance):\n")
-    f.write(not_user_players.get_table(top=10))
-
-    # copy of not_user_players is required because sort_by_fda() works by sort_by_total_pts_prev_n_gw() first and filter players with hard fixture.
-    # if a copy is not created, subsequent sorts are not accurate because some players are filtered
-    fda = deepcopy(not_user_players)
-    fda.sort_by_fda()
-    if len(fda.stats) > 0:
-        f.write("\n\nWatchlist (Fixture):\n")
-        f.write(fda.get_table(top=10))
-
-    not_user_players.sort_by_xgi()
-    f.write("\n\nWatchlist (xGI):\n")
-    f.write(not_user_players.get_table(top=10))
-
-    not_user_players.sort_by_xpts()
-    f.write("\n\nWatchlist (xP):\n")
-    f.write(not_user_players.get_table(top=10))
+    not_user_players.sort_by_value()
+    f.write("\n\nWatchlist (Value):\n")
+    f.write(not_user_players.get_table(top=20))
 
     f.write("\n")

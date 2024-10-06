@@ -179,6 +179,15 @@ class Players:
             )
         )
 
+    def sort_by_value(self):
+        self.stats = OrderedDict(
+            sorted(
+                self.stats.items(),
+                key=lambda x: getitem(x[1], "weighted_value"),
+                reverse=True,
+            )
+        )
+
     def sort_by_fda(self):
         self.sort_by_total_pts_prev_n_gw()
         self.stats = {k: v for k, v in self.stats.items() if v["fdr_avg"] <= 2.8}
