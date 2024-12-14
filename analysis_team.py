@@ -16,7 +16,7 @@ with open("output/analysis_team.txt", "w") as f:
 
     user_players = Players(fpl_ids=user.team, tqdm_desc="Analysing user's team")
 
-    user_players.sort_by_total_pts_prev_n_gw()
+    user_players.sort_by_value()
     f.write("Performance:\n")
     f.write(user_players.get_table())
 
