@@ -10,4 +10,5 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - run: uv python install
       - run: uv sync
+      - run: ./hacks/hacks.sh
       - run: uv run pytest
