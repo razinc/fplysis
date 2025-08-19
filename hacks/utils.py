@@ -1,13 +1,13 @@
 import asyncio
+import ssl
+from datetime import datetime
+from functools import update_wrapper
+from json import JSONDecodeError
+
 import aiohttp
 import certifi
-import ssl
-
-from json import JSONDecodeError
 from aiohttp import ClientResponse
-from datetime import datetime
 from fpl.constants import API_URLS
-from functools import update_wrapper
 
 headers = {"User-Agent": ""}
 ssl_context = ssl.create_default_context(cafile=certifi.where())
