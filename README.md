@@ -25,9 +25,13 @@ Read Fabio Forges full interview [here](https://fantasyfootballcommunity.com/tip
 * `analysis_top_10k.py` is used to track which players is owned by top 10K managers.
 
 # Installation
-`fplysis` uses `poetry` for dependacies management. To install all of them:
+`fplysis` uses `uv` for dependacies management. To install all of them:
 ```bash
-poetry install
+uv sync
+```
+`fpl` package used is outdated. To update it locally:
+```bash
+./hacks/hacks.sh
 ```
 
 # Credentials
@@ -41,17 +45,9 @@ COOKIE = """datadome=;pl_profile="""
 You can view sample outputs of each script in section below.
 
 # Usage
-Enter virtual environment:
-```bash
-poetry shell
-```
-Or you can use `poetry run` before any script:
-```bash
-poetry run python analysis_top_10k.py
-```
 Each of available scripts have a simple guide on how to use them by adding `-h` switch.
 ```bash
-poetry run python analysis_team.py -h
+uv run analysis_team.py -h
 ```
 
 # Sample Output
