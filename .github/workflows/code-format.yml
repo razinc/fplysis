@@ -10,7 +10,7 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - run: uv python install
       - run: uv sync
-      - run: uv run isort .
+      - run: uv run isort --skip hacks --skip .venv .
       - uses: stefanzweifel/git-auto-commit-action@v4.16.0
         with:
           commit_message: isort code format run
@@ -22,7 +22,7 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - run: uv python install
       - run: uv sync
-      - run: uv run black . --exclude hacks --exclude .venv .
+      - run: uv run black --exclude "/(hacks|.venv)/" .
       - uses: stefanzweifel/git-auto-commit-action@v4.16.0
         with:
           commit_message: black code format run
