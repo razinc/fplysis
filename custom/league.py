@@ -3,7 +3,6 @@ from collections import Counter
 from itertools import islice
 
 import aiohttp
-import fpl_credentials
 from fpl import FPL
 from tqdm import tqdm
 
@@ -19,11 +18,6 @@ class League:
         top_10k = []
         async with aiohttp.ClientSession() as session:
             fpl = FPL(session)
-            await fpl.login(
-                email=fpl_credentials.EMAIL,
-                password=fpl_credentials.PASSWORD,
-                cookie=fpl_credentials.COOKIE,
-            )
             league = await fpl.get_classic_league(self.league_id)
             self.name = league.league["name"]
             for page in tqdm(range(1, 203, 1), desc="Parsing top 10k managers      "):
