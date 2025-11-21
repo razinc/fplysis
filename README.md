@@ -30,7 +30,7 @@ Read Fabio Forges full interview [here](https://fantasyfootballcommunity.com/tip
 ```bash
 uv sync
 ```
-`fpl` package used is outdated. To update it locally:
+`fpl` package (version 0.6.35) used is outdated. To update it locally:
 ```bash
 ./hacks/hacks.sh
 ```
